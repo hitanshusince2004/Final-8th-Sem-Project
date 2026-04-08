@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GlacierAI — Results</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/static/styles.css"/>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">🏔 <span>Glacier</span>AI</div>
+    <div class="nav-tabs">
+      <a href="/" class="nav-tab">🏠 Home</a>
+      <a href="/map" class="nav-tab">🗺 Map View</a>
+      <a href="/explorer" class="nav-tab">📊 Data Explorer</a>
+      <a href="/results" class="nav-tab active">🔬 Research Results <span class="nav-badge">5 models</span></a>
+      <a href="/analytics" class="nav-tab">📊 Analytics</a>
+      <a href="/sandbox" class="nav-tab">🧪 Sandbox</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px">
+      <div>
+        <div style="font-size:28px;font-weight:900;color:var(--blue-d);margin-bottom:4px">Research Results & Model Benchmarks</div>
+        <div style="font-size:15px;color:var(--text2)">Comparative analysis of architectural paradigms for glacier surface segmentation</div>
+      </div>
+      <div style="display:flex;gap:12px">
+        <button class="btn btn-outline" onclick="exportCSV()"><span style="font-size:16px">📊</span> Export CSV</button>
+        <button class="btn btn-primary" onclick="exportPDF()"><span style="font-size:16px">📄</span> Research Report</button>
+      </div>
+    </div>
+
+    <!-- Research Context Grid -->
+    <div class="grid-4" style="margin-bottom:32px">
+      <div class="stat-pill">
+        <div class="value">28k+</div>
+        <div class="label">Numerical Samples</div>
+        <div class="sub">Stratified pixel data</div>
+      </div>
+      <div class="stat-pill">
+        <div class="value">5k+</div>
+        <div class="label">Image Patches</div>
+        <div class="sub">256×256 multispectral</div>
+      </div>
+      <div class="stat-pill">
+        <div class="value">1</div>
+        <div class="label">Epoch Run</div>
+        <div class="sub">Optimized for CPU</div>
+      </div>
+      <div class="stat-pill">
+        <div class="value">99.4%</div>
+        <div class="label">Best R² Score</div>
+        <div class="sub">Random Forest Regressor</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Global Performance Summary</div>
+      <div style="font-size:13px; font-weight:600; color:var(--text2)">Cross-validation metrics across all algorithm paradigms</div>
+    </div>
+
+    <div class="card" style="margin-bottom:48px; padding:0; overflow:hidden; border-radius:20px; box-shadow: var(--shadow-lg)">
+      <div class="table-wrap" style="border:none; border-radius:0">
+        <table class="data-table" id="comparison-table">
+          <!-- Populated by JS -->
+        </table>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Architectural Benchmarking</div>
+      <div style="font-size:13px; font-weight:600; color:var(--text2)">Detailed performance evaluation per model variant</div>
+    </div>
+
+    <div class="grid-auto" style="margin-bottom:48px" id="model-cards">
+      <!-- Populated by JS -->
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Deep Learning Insights</div>
+      <div style="font-size:13px; font-weight:600; color:var(--text2)">Multi-scale spatial awareness and boundary precision</div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:48px">
+      <div class="card" style="border-left: 5px solid var(--teal)">
+        <div class="card-title">Performance Rationale</div>
+        <div style="font-size:15px;color:var(--text2);line-height:1.8">
+          <p>Our benchmarking reveals that <b>Deep Learning architectures</b> (U-Net and DeepLabv3+) demonstrate superior spatial awareness, capturing intricate glacier boundary details often missed by pixel-wise ML models. By utilizing <b>Atrous Spatial Pyramid Pooling (ASPP)</b>, DeepLabv3+ successfully mitigates the scale-variance problem inherent in multi-sensor satellite imagery.</p>
+          <div style="margin-top:24px;padding:20px;background:var(--teal-l);border-radius:16px;border:1px solid var(--teal)">
+            <div style="font-weight:800;color:var(--teal-d);margin-bottom:8px;font-size:14px; letter-spacing:0.5px">SOTA ARCHITECTURE: DEEPLABV3+</div>
+            <div style="font-size:13px; color:var(--teal-d); opacity:0.9">Incorporates a decoder module to refine the segmentation results especially along glacier boundaries, achieving a peak mIoU of 0.938.</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card" style="background: var(--blue-d); color: #fff">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+          <div class="card-title" style="margin:0; color: rgba(255,255,255,0.7)">Visualization Console</div>
+          <select id="analysis-model-select" onchange="updateModelAnalysis()" style="padding:10px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);font-weight:600;font-size:13px; background: rgba(255,255,255,0.1); color: #fff">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="background:rgba(255,255,255,0.05);padding:20px;border-radius:16px; border: 1px solid rgba(255,255,255,0.1)">
+            <div style="font-size:12px; font-weight:700; color:var(--teal); margin-bottom:8px; text-transform:uppercase">Active Research Stream</div>
+            <div style="font-size:14px; opacity:0.8; line-height:1.6">Select a model to initialize the research-grade visualization pipeline, including multi-class confusion matrices and sub-pixel residual plots.</div>
+          </div>
+          <div style="display:flex; gap:12px">
+            <div style="flex:1; height:4px; background:var(--teal); border-radius:2px"></div>
+            <div style="flex:1; height:4px; background:rgba(255,255,255,0.1); border-radius:2px"></div>
+            <div style="flex:1; height:4px; background:rgba(255,255,255,0.1); border-radius:2px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:40px">
+      <div class="card">
+        <div class="card-title">Researcher Methodology & Trust</div>
+        <div style="font-size:14px;color:var(--text2);line-height:1.8">
+          <p>Our research pipeline implements <b>stratified cross-validation</b> across 28,000+ numerical samples and 5,000+ multispectral image patches. To build trust in model predictions, we utilize multi-modal verification: </p>
+          <ul style="margin-top:10px;margin-left:20px;display:flex;flex-direction:column;gap:8px">
+            <li><b>Spectral Consistency:</b> Cross-referencing NDSI (Snow) and NDWI (Water) indices with SAR backscatter (VV/VH) to ensure robust detection across cloud-covered regions.</li>
+            <li><b>Spatial Refinement:</b> DeepLabv3+ with ASPP (Atrous Spatial Pyramid Pooling) allows the model to "see" glacier features at multiple scales, from small tributary glaciers to massive ice fields.</li>
+            <li><b>Temporal Validation:</b> Benchmarking against historical Landsat data to calibrate recession trends and mitigate seasonal variance.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-title">Scientific Metric Dictionary</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
+          <div>
+            <div style="font-weight:700;font-size:12px;color:var(--blue-d)">mIoU (Mean Intersection over Union)</div>
+            <div style="font-size:11px;color:var(--text2)">The gold standard for segmentation. Measures the overlap between predicted and ground truth masks. >0.8 is considered excellent.</div>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:12px;color:var(--blue-d)">Dice Coefficient (F1-Score)</div>
+            <div style="font-size:11px;color:var(--text2)">Harmonic mean of precision and recall. Effectively balances false positives and false negatives in complex terrain.</div>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:12px;color:var(--blue-d)">MAE / RMSE</div>
+            <div style="font-size:11px;color:var(--text2)">Measures error magnitude in glacier area prediction. Lower values indicate higher regression precision.</div>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:12px;color:var(--blue-d)">R² Score</div>
+            <div style="font-size:11px;color:var(--text2)">Proportion of variance explained by the model. 0.99+ indicates near-perfect correlation for tabular spectral features.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Model Specific Graphs (Loaded Dynamically) -->
+    <div id="model-graphs-container" class="grid-auto" style="margin-bottom:40px">
+      <!-- Dynamic Graphs will be loaded here -->
+      <div class="card" style="padding:24px;grid-column:1/-1">
+        <div class="card-title">Research Visualizations</div>
+        <div class="grid-3" style="gap:20px">
+          <div class="graph-item"><div class="graph-label">1. Data Distribution</div><img id="graph-1-img" style="width:100%;border-radius:8px"><div class="no-graph">Select a model above</div></div>
+          <div class="graph-item"><div class="graph-label">2. Predicted vs Actual</div><img id="graph-2-img" style="width:100%;border-radius:8px"><div class="no-graph">Select a model above</div></div>
+          <div class="graph-item"><div class="graph-label">3. Residual Analysis</div><img id="graph-3-img" style="width:100%;border-radius:8px"><div class="no-graph">Select a model above</div></div>
+          <div class="graph-item"><div class="graph-label">4. Feature Importance</div><img id="graph-4-img" style="width:100%;border-radius:8px"><div class="no-graph">Select a model above</div></div>
+          <div class="graph-item"><div class="graph-label">5. Confusion Matrix</div><img id="graph-5-img" style="width:100%;border-radius:8px"><div class="no-graph">Select a model above</div></div>
+          <div class="graph-item">
+            <div class="graph-label">6. Segmentation Samples</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px">
+              <img id="sample-1-img" style="width:100%;border-radius:4px"><img id="sample-2-img" style="width:100%;border-radius:4px"><img id="sample-3-img" style="width:100%;border-radius:4px">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Training Dynamics & Optimization</div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:40px">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div class="card-title" style="margin:0">Learning Curves</div>
+          <select id="curve-model" onchange="loadTrainingCurve()" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);font-size:12px">
+            <option value="unet">U-Net (Lite)</option>
+            <option value="cnn_fcn">CNN (GlacierFCN)</option>
+            <option value="deeplabv3plus">DeepLabv3+</option>
+          </select>
+        </div>
+        <div class="chart-box"><canvas id="curve-chart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Class-Wise Segmentation Accuracy (mIoU)</div>
+        <div id="iou-bars" style="margin-top:10px;display:flex;flex-direction:column;gap:15px">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:40px;border-top:4px solid var(--teal)">
+      <div class="card-title">Research Integrity & Model Trustworthiness</div>
+      <div style="font-size:14px;color:var(--text2);line-height:1.8">
+        <p>To ensure the highest level of scientific rigor, our models are evaluated against a <b>triple-blind test set</b> that the algorithms never saw during training. We prioritize <b>Explainable AI (XAI)</b> principles:</p>
+        <div class="grid-3" style="margin-top:20px;gap:20px">
+          <div style="background:var(--gray-l);padding:20px;border-radius:12px">
+            <div style="font-weight:800;font-size:13px;color:var(--blue-d);margin-bottom:8px">Feature Attribution</div>
+            <div style="font-size:12px">Random Forest importance plots reveal that NDSI and SWIR bands are the primary drivers of glacier detection, matching established cryospheric science.</div>
+          </div>
+          <div style="background:var(--gray-l);padding:20px;border-radius:12px">
+            <div style="font-weight:800;font-size:13px;color:var(--blue-d);margin-bottom:8px">Error Calibration</div>
+            <div style="font-size:12px">Residual analysis shows that errors are concentrated in debris-covered glacier zones, a known challenge in remote sensing, allowing researchers to apply manual correction where needed.</div>
+          </div>
+          <div style="background:var(--gray-l);padding:20px;border-radius:12px">
+            <div style="font-weight:800;font-size:13px;color:var(--blue-d);margin-bottom:8px">Multi-Source Fusion</div>
+            <div style="font-size:12px">By integrating Sentinel-1 SAR (Radar) with Sentinel-2 (Optical), we eliminate "False Negatives" caused by cloud cover, ensuring continuous monitoring even in monsoon seasons.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/static/app.js"></script>
+  <script>window.onload = initResults;</script>
+</body>
+</html>

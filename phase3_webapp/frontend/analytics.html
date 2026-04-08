@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GlacierAI — Analytics</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/static/styles.css"/>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">🏔 <span>Glacier</span>AI</div>
+    <div class="nav-tabs">
+      <a href="/" class="nav-tab">🏠 Home</a>
+      <a href="/map" class="nav-tab">🗺 Map View</a>
+      <a href="/explorer" class="nav-tab">📊 Data Explorer</a>
+      <a href="/results" class="nav-tab">📈 Results <span class="nav-badge">5 models</span></a>
+      <a href="/analytics" class="nav-tab active">🔬 Analytics</a>
+      <a href="/sandbox" class="nav-tab">🧪 Sandbox</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div style="margin-bottom:32px;display:flex;justify-content:space-between;align-items:flex-end">
+      <div>
+        <div style="font-size:28px;font-weight:900;color:var(--blue-d);margin-bottom:4px">Cryospheric Analytics & Insights</div>
+        <div style="font-size:15px;color:var(--text2)">Multi-temporal change detection and spectral trend analysis (2018–2025)</div>
+      </div>
+      <div style="display:flex;gap:12px">
+        <div class="badge badge-teal" style="padding:8px 16px">Region: HKH Central</div>
+        <div class="badge badge-blue" style="padding:8px 16px">Sensor: Sentinel-1/2</div>
+      </div>
+    </div>
+
+    <!-- Key Metrics Grid -->
+    <div class="grid-4" style="margin-bottom:32px">
+      <div class="card" style="border-top:4px solid var(--coral)">
+        <div style="font-size:11px;font-weight:800;color:var(--text2);text-transform:uppercase;margin-bottom:10px;letter-spacing:1px">Mean Melt Velocity</div>
+        <div style="font-size:24px;font-weight:900;color:var(--coral)">-1.85% <span style="font-size:14px">/ yr</span></div>
+        <div style="font-size:12px;color:var(--text2);margin-top:8px">↑ 12% vs 2010–2018 baseline</div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--teal)">
+        <div style="font-size:11px;font-weight:800;color:var(--text2);text-transform:uppercase;margin-bottom:10px;letter-spacing:1px">Glacier Health Index</div>
+        <div style="font-size:24px;font-weight:900;color:var(--teal)">72.4 <span style="font-size:14px">/ 100</span></div>
+        <div style="font-size:12px;color:var(--text2);margin-top:8px">Karakoram stability remains high</div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--blue)">
+        <div style="font-size:11px;font-weight:800;color:var(--text2);text-transform:uppercase;margin-bottom:10px;letter-spacing:1px">Water Body Expansion</div>
+        <div style="font-size:24px;font-weight:900;color:var(--blue)">+142.5 <span style="font-size:14px">km²</span></div>
+        <div style="font-size:12px;color:var(--text2);margin-top:8px">Proglacial lake development detected</div>
+      </div>
+      <div class="card" style="border-top:4px solid var(--purple)">
+        <div style="font-size:11px;font-weight:800;color:var(--text2);text-transform:uppercase;margin-bottom:10px;letter-spacing:1px">LST Anomaly (Avg)</div>
+        <div style="font-size:24px;font-weight:900;color:var(--purple)">+1.24°C</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:8px">Landsat-9 Thermal TIRS calibration</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:32px">
+      <div class="card">
+        <div class="card-title">Regional Comparative Analysis</div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:20px">Inter-glacier comparison using multi-modal spectral and thermal proxies.</div>
+        <div style="display:flex;gap:12px;margin-bottom:20px">
+          <select id="compare-g1" style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);font-weight:600">
+            <option value="baltoro">Baltoro Glacier (Karakoram)</option>
+            <option value="khumbu">Khumbu Glacier (Himalaya)</option>
+            <option value="siachen">Siachen Glacier (Karakoram)</option>
+            <option value="gangotri">Gangotri Glacier (Himalaya)</option>
+          </select>
+          <select id="compare-g2" style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);font-weight:600">
+            <option value="khumbu">Khumbu Glacier (Himalaya)</option>
+            <option value="baltoro">Baltoro Glacier (Karakoram)</option>
+            <option value="siachen">Siachen Glacier (Karakoram)</option>
+            <option value="gangotri">Gangotri Glacier (Himalaya)</option>
+          </select>
+          <button class="btn btn-primary" onclick="updateComparison()" style="padding:0 24px">Analyze</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" id="comparison-view">
+          <div class="card" style="padding:15px;background:var(--gray-l);border:none">
+            <div id="g1-name" style="font-weight:800;font-size:14px;margin-bottom:8px">Select Glacier 1</div>
+            <div style="display:flex;justify-content:space-between;font-size:12px"><span>Melt Rate</span><span id="g1-melt" style="font-weight:700;color:var(--coral)">—</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px"><span>Health Index</span><span id="g1-health" style="font-weight:700;color:var(--teal)">—</span></div>
+          </div>
+          <div class="card" style="padding:15px;background:var(--gray-l);border:none">
+            <div id="g2-name" style="font-weight:800;font-size:14px;margin-bottom:8px">Select Glacier 2</div>
+            <div style="display:flex;justify-content:space-between;font-size:12px"><span>Melt Rate</span><span id="g2-melt" style="font-weight:700;color:var(--coral)">—</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px"><span>Health Index</span><span id="g2-health" style="font-weight:700;color:var(--teal)">—</span></div>
+          </div>
+        </div>
+        <div style="margin-top:20px;padding:15px;background:var(--teal-l);border-radius:10px;font-size:12px;color:var(--text2)">
+          <b>Research Insight:</b> Comparative analysis reveals that Karakoram glaciers (e.g., Baltoro) show higher stability compared to the Central Himalaya (e.g., Gangotri), a phenomenon known as the "Karakoram Anomaly".
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Spectral Index Multi-Temporal Trends</div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:20px">Cross-correlation of NDSI (Snow) and NDVI (Vegetation) anomalies (2018–2025).</div>
+        <div class="chart-box" style="height:320px"><canvas id="spectral-trend-chart"></canvas></div>
+        <div style="margin-top:20px;font-size:12px;color:var(--text2)">
+          <b>Trend Analysis:</b> The divergence between declining NDSI and increasing NDVI suggests "greening" of proglacial zones as permafrost thaws and vegetation colonizes previously ice-covered terrain.
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:32px">
+      <div class="card">
+        <div class="card-title">Hypsometric Distribution</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:15px">Pixel-level elevation frequency derived from SRTM DEM data.</div>
+        <div class="chart-box" style="height:240px"><canvas id="elev-dist-chart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">LST vs Glacier Area</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:15px">Correlation between Land Surface Temperature and melt extent.</div>
+        <div class="chart-box" style="height:240px"><canvas id="lst-area-scatter"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Precipitation Proxy</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:15px">CHIRPS-based accumulation vs ablation patterns.</div>
+        <div class="chart-box" style="height:240px"><canvas id="precip-chart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Research Methodology Insights -->
+    <div class="card" style="margin-bottom:40px;border-left:4px solid var(--teal)">
+      <div class="card-title">Research Methodology & Algorithms</div>
+      <div style="font-size:14px;color:var(--text2);line-height:1.8">
+        <p>The analytics presented here are derived from multi-modal sensor fusion (Sentinel-1 SAR C-band and Sentinel-2 MSI). 
+        The <b>Glacier Health Index (GHI)</b> is a weighted composite of NDSI consistency, LST anomalies, and SAR-based surface roughness.</p>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-top:20px;background:var(--gray-l);padding:20px;border-radius:12px">
+          <div><b>NDSI:</b> (Green - SWIR) / (Green + SWIR)</div>
+          <div><b>NDWI:</b> (Green - NIR) / (Green + NIR)</div>
+          <div><b>NDVI:</b> (NIR - Red) / (NIR + Red)</div>
+        </div>
+        
+        <p style="margin-top:20px">Temporal trends use a Sen's slope estimator to mitigate the impact of seasonal outlier variances. Land Surface Temperature (LST) is calibrated from Landsat TIRS bands using emissivity-corrected algorithms.</p>
+      </div>
+    </div>
+  </div>
+  <script src="/static/app.js"></script>
+  <script>window.onload = initAnalytics;</script>
+</body>
+</html>

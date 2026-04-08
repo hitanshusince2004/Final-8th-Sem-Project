@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GlacierAI — Sandbox</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/static/styles.css"/>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">🏔 <span>Glacier</span>AI</div>
+    <div class="nav-tabs">
+      <a href="/" class="nav-tab">🏠 Home</a>
+      <a href="/map" class="nav-tab">🗺 Map View</a>
+      <a href="/explorer" class="nav-tab">📊 Data Explorer</a>
+      <a href="/results" class="nav-tab">📈 Results <span class="nav-badge">5 models</span></a>
+      <a href="/analytics" class="nav-tab">🔬 Analytics</a>
+      <a href="/sandbox" class="nav-tab active">🧪 Sandbox</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:22px;font-weight:800;margin-bottom:4px;color:var(--blue-d)">Architectural Hyperparameter Sandbox</div>
+        <div style="font-size:13px;color:var(--text2)">Simulate model retraining with optimized parameters for specific research scenarios</div>
+      </div>
+      <div class="stat-badge" style="background:var(--coral-l);color:var(--coral-d);padding:6px 10px;border-radius:6px;font-size:11px;font-weight:700">Compute: T4 GPU Simulation</div>
+    </div>
+
+    <div class="map-layout">
+      <div class="map-panel" style="width:320px">
+        <div class="card">
+          <div class="card-title">Training Parameters</div>
+          <div style="margin-bottom:16px">
+            <label style="font-size:12px;color:var(--text2)">Target Model</label>
+            <select id="sb-model" style="width:100%;padding:8px;margin-top:4px;border-radius:6px;border:1px solid var(--border)">
+              <option value="rf">Random Forest Classifier</option>
+              <option value="cnn">CNN (GlacierFCN)</option>
+              <option value="unet">U-Net Segmentation</option>
+            </select>
+          </div>
+          <div style="margin-bottom:16px">
+            <label style="font-size:12px;color:var(--text2)">Number of Estimators / Epochs</label>
+            <input type="range" id="sb-epochs" min="10" max="200" value="50" style="width:100%;margin-top:4px">
+            <div style="display:flex;justify-content:space-between;font-size:10px"><span>10</span><span id="sb-epoch-val">50</span><span>200</span></div>
+          </div>
+          <div style="margin-bottom:16px">
+            <label style="font-size:12px;color:var(--text2)">Learning Rate / Depth</label>
+            <input type="range" id="sb-lr" min="1" max="100" value="10" style="width:100%;margin-top:4px">
+            <div style="display:flex;justify-content:space-between;font-size:10px"><span>0.0001</span><span id="sb-lr-val">0.001</span><span>0.1</span></div>
+          </div>
+          <button class="btn btn-teal" style="width:100%" onclick="runSandboxTraining()">🚀 Run Retrain Simulation</button>
+        </div>
+      </div>
+      <div class="map-main">
+        <div class="grid-2">
+          <div class="card"><div class="card-title">Real-time Loss Curve</div><div class="chart-box"><canvas id="sb-loss-chart"></canvas></div></div>
+          <div class="card"><div class="card-title">Real-time Accuracy</div><div class="chart-box"><canvas id="sb-acc-chart"></canvas></div></div>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <div class="card-title">Impact Analysis</div>
+          <div id="sb-impact" style="font-size:13px;color:var(--text2)">Adjust parameters and click 'Run' to see how model performance changes.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/static/app.js"></script>
+  <script>window.onload = initSandbox;</script>
+</body>
+</html>

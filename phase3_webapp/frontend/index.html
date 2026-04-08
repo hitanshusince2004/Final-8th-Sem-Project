@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GlacierAI — Home</title>
+  <link rel="stylesheet" href="/static/styles.css"/>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">🏔 <span>Glacier</span>AI</div>
+    <div class="nav-tabs">
+      <a href="/" class="nav-tab active">🏠 Home</a>
+      <a href="/map" class="nav-tab">🗺 Map View</a>
+      <a href="/explorer" class="nav-tab">📊 Data Explorer</a>
+      <a href="/results" class="nav-tab">📈 Results <span class="nav-badge">5 models</span></a>
+      <a href="/analytics" class="nav-tab">🔬 Analytics</a>
+      <a href="/sandbox" class="nav-tab">🧪 Sandbox</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="hero" style="border-radius:32px; padding:80px; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); margin-bottom:60px">
+      <div style="font-size:14px;font-weight:800;color:var(--teal);text-transform:uppercase;letter-spacing:3px;margin-bottom:20px; font-family:'Poppins'">Multi-Spectral Geospatial Intelligence</div>
+      <h1 style="font-size:56px; margin-bottom:24px">Glacier Pulse <span style="color:var(--teal)">AI</span></h1>
+      <p style="font-size:20px; max-width:900px; opacity:0.9; font-weight:400; line-height:1.8">State-of-the-art monitoring platform leveraging <b>Sentinel-1 SAR</b>, <b>Sentinel-2 MSI</b>, and <b>Deep Learning</b> architectures to track cryospheric recession with sub-pixel precision across the HKH region.</p>
+      
+      <div class="hero-tags" style="margin-top:40px">
+        <div class="hero-tag" style="background:rgba(13, 148, 136, 0.15); border-color:var(--teal)">
+          <span style="font-size:20px; margin-right:8px">🛰️</span> <b>3</b> Satellite Constellations
+        </div>
+        <div class="hero-tag">
+          <span style="font-size:20px; margin-right:8px">🧠</span> <b>5</b> Research Models
+        </div>
+        <div class="hero-tag">
+          <span style="font-size:20px; margin-right:8px">📊</span> <b>28,000+</b> Spectral Samples
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Overview -->
+    <div class="grid-3" style="margin-bottom:60px">
+      <div class="card" style="border-top:4px solid var(--teal)">
+        <div style="font-size:32px; margin-bottom:16px">🗺️</div>
+        <h3 style="margin-bottom:12px; font-size:20px">Interactive Intelligence</h3>
+        <p style="font-size:14px; color:var(--text2)">Explore over 25,000 research points with multi-layer overlays including AI segmentation, melt heatmaps, and spectral index rasters.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--blue)">
+        <div style="font-size:32px; margin-bottom:16px">🔬</div>
+        <h3 style="margin-bottom:12px; font-size:20px">Model Benchmarking</h3>
+        <p style="font-size:14px; color:var(--text2)">Deep-dive into model performance with mIoU, Dice coefficients, and confusion matrices for CNN, U-Net, and DeepLabv3+ architectures.</p>
+      </div>
+      <div class="card" style="border-top:4px solid var(--coral)">
+        <div style="font-size:32px; margin-bottom:16px">📈</div>
+        <h3 style="margin-bottom:12px; font-size:20px">Temporal Analytics</h3>
+        <p style="font-size:14px; color:var(--text2)">Analyze multi-year trends (2018–2025) in glacier health, surface temperature anomalies, and proglacial lake expansion.</p>
+      </div>
+    </div>
+
+    <!-- Data Acquisition Section -->
+    <div class="section-header">
+      <div class="section-title">Satellite Sensor Fusion</div>
+      <div style="font-size:13px; font-weight:600; color:var(--text2)">Multi-modal acquisition pipeline via Google Earth Engine API</div>
+    </div>
+    
+    <div class="grid-3" style="margin-bottom:40px">
+      <div class="card" style="border-top:4px solid var(--blue); background: var(--blue-l); border-bottom: 1px solid var(--border)">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px">
+          <div style="width:40px; height:40px; background:#fff; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px">🛰️</div>
+          <div>
+            <div style="font-weight:800;font-size:18px;color:var(--blue-d)">Sentinel-2</div>
+            <div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase">Multi-Spectral Optical</div>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px">Primary data source providing high-resolution multi-spectral imagery for glacier surface classification, NDSI, and NDWI computation.</p>
+        <div style="display:flex;flex-direction:column;gap:10px; background:#fff; padding:16px; border-radius:12px">
+          <div style="font-size:12px;display:flex;justify-content:space-between; border-bottom:1px solid var(--blue-l); padding-bottom:6px"><span>Spectral Bands</span><span style="font-weight:700">13 bands</span></div>
+          <div style="font-size:12px;display:flex;justify-content:space-between; border-bottom:1px solid var(--blue-l); padding-bottom:6px"><span>Resolution</span><span style="font-weight:700">10m, 20m, 60m</span></div>
+          <div style="font-size:12px;display:flex;justify-content:space-between"><span>Revisit Time</span><span style="font-weight:700">5-day</span></div>
+        </div>
+      </div>
+      
+      <div class="card" style="border-top:4px solid var(--teal); background: var(--teal-l); border-bottom: 1px solid var(--border)">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px">
+          <div style="width:40px; height:40px; background:#fff; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px">📡</div>
+          <div>
+            <div style="font-weight:800;font-size:18px;color:var(--blue-d)">Sentinel-1</div>
+            <div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase">SAR (C-band)</div>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px">Synthetic Aperture Radar providing all-weather, day-night imaging capability for glacier surface analysis independent of cloud cover.</p>
+        <div style="display:flex;flex-direction:column;gap:10px; background:#fff; padding:16px; border-radius:12px">
+          <div style="font-size:12px;display:flex;justify-content:space-between; border-bottom:1px solid var(--blue-l); padding-bottom:6px"><span>Polarization</span><span style="font-weight:700">VV & VH</span></div>
+          <div style="font-size:12px;display:flex;justify-content:space-between; border-bottom:1px solid var(--blue-l); padding-bottom:6px"><span>Resolution</span><span style="font-weight:700">5m × 20m</span></div>
+          <div style="font-size:12px;display:flex;justify-content:space-between"><span>Revisit Time</span><span style="font-weight:700">6-day</span></div>
+        </div>
+      </div>
+
+      <div class="card" style="border-top:4px solid var(--amber); background: var(--amber-l); border-bottom: 1px solid var(--border)">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px">
+          <div style="width:40px; height:40px; background:#fff; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px">📜</div>
+          <div>
+            <div style="font-weight:800;font-size:18px;color:var(--blue-d)">Landsat 8/9</div>
+            <div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase">Historical Optical</div>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px">Long-term historical archive extending temporal coverage back decades, enabling trend analysis and validation of glacier recession rates.</p>
+        <div style="display:flex;flex-direction:column;gap:10px; background:#fff; padding:16px; border-radius:12px">
+          <div style="font-size:12px;display:flex;justify-content:space-between; border-bottom:1px solid var(--blue-l); padding-bottom:6px"><span>Spectral Bands</span><span style="font-weight:700">11 bands</span></div>
+          <div style="font-size:12px;display:flex;justify-content:space-between; border-bottom:1px solid var(--blue-l); padding-bottom:6px"><span>Resolution</span><span style="font-weight:700">30m, 15m pan</span></div>
+          <div style="font-size:12px;display:flex;justify-content:space-between"><span>Revisit Time</span><span style="font-weight:700">8-day</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spectral Indices Section -->
+    <div class="section-header">
+      <div class="section-title">Spectral Analytics Engine</div>
+      <div style="font-size:13px; font-weight:600; color:var(--text2)">Derived indices for multi-temporal change detection</div>
+    </div>
+
+    <div class="grid-auto" style="margin-bottom:60px">
+      <div class="card" style="padding:24px; border-left: 4px solid var(--blue)">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div style="width:44px;height:44px;background:var(--blue-l);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--blue-d); font-size:12px">NDSI</div>
+          <div style="font-weight:700;font-size:15px; color:var(--blue-d)">Snow Index</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:10px; font-family:monospace; background:var(--gray-l); padding:8px; border-radius:6px">(Green - SWIR) / (Green + SWIR)</div>
+        <div style="font-size:12px;font-weight:700;color:var(--teal); display:flex; align-items:center; gap:6px">
+          <span style="width:8px; height:8px; background:var(--teal); border-radius:50%"></span> Threshold: > 0.4
+        </div>
+      </div>
+      <div class="card" style="padding:24px; border-left: 4px solid var(--teal)">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div style="width:44px;height:44px;background:var(--teal-l);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--teal); font-size:12px">NDWI</div>
+          <div style="font-weight:700;font-size:15px; color:var(--blue-d)">Water Index</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:10px; font-family:monospace; background:var(--gray-l); padding:8px; border-radius:6px">(Green - NIR) / (Green + NIR)</div>
+        <div style="font-size:12px;font-weight:700;color:var(--teal); display:flex; align-items:center; gap:6px">
+          <span style="width:8px; height:8px; background:var(--teal); border-radius:50%"></span> Threshold: > 0.3
+        </div>
+      </div>
+      <div class="card" style="padding:24px; border-left: 4px solid var(--amber)">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div style="width:44px;height:44px;background:var(--amber-l);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--amber); font-size:12px">NDVI</div>
+          <div style="font-weight:700;font-size:15px; color:var(--blue-d)">Veg Index</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:10px; font-family:monospace; background:var(--gray-l); padding:8px; border-radius:6px">(NIR - Red) / (NIR + Red)</div>
+        <div style="font-size:12px;font-weight:700;color:var(--teal); display:flex; align-items:center; gap:6px">
+          <span style="width:8px; height:8px; background:var(--teal); border-radius:50%"></span> Threshold: > 0.2
+        </div>
+      </div>
+      <div class="card" style="padding:24px; border-left: 4px solid var(--coral)">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div style="width:44px;height:44px;background:var(--coral-l);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--coral); font-size:12px">LST</div>
+          <div style="font-weight:700;font-size:15px; color:var(--blue-d)">Surface Temp</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:10px; font-family:monospace; background:var(--gray-l); padding:8px; border-radius:6px">Thermal Calibration (TIRS)</div>
+        <div style="font-size:12px;font-weight:700;color:var(--coral); display:flex; align-items:center; gap:6px">
+          <span style="width:8px; height:8px; background:var(--coral); border-radius:50%"></span> Critical: > 0°C
+        </div>
+      </div>
+    </div>
+
+    <!-- ML & DL Model Pipeline -->
+    <div class="section-header">
+      <div class="section-title">ML & DL Model Pipeline</div>
+      <div style="font-size:12px;color:var(--text2)">Five models trained and evaluated for glacier melting detection — from classical ML to advanced segmentation</div>
+    </div>
+
+    <div class="grid-auto" style="margin-bottom:40px">
+      <div class="card" style="padding:20px">
+        <div style="font-weight:800;font-size:15px;color:var(--blue-d);margin-bottom:8px">Linear Regression</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:12px">Baseline regression model for predicting continuous glacier area values from spectral features.</div>
+        <div style="display:flex;gap:6px"><span class="badge badge-blue">Regression</span><span class="badge badge-teal">Baseline</span></div>
+      </div>
+      <div class="card" style="padding:20px">
+        <div style="font-weight:800;font-size:15px;color:var(--blue-d);margin-bottom:8px">Random Forest</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:12px">Ensemble of decision trees capturing non-linear spectral relationships for improved predictions.</div>
+        <div style="display:flex;gap:6px"><span class="badge badge-blue">Ensemble</span><span class="badge badge-teal">Non-linear</span></div>
+      </div>
+      <div class="card" style="padding:20px">
+        <div style="font-weight:800;font-size:15px;color:var(--blue-d);margin-bottom:8px">CNN</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:12px">Convolutional Neural Network for spatial feature extraction and glacier/non-glacier classification.</div>
+        <div style="display:flex;gap:6px"><span class="badge badge-blue">Classification</span><span class="badge badge-teal">Conv Layers</span></div>
+      </div>
+      <div class="card" style="padding:20px">
+        <div style="font-weight:800;font-size:15px;color:var(--blue-d);margin-bottom:8px">U-Net</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:12px">Encoder-decoder architecture with skip connections for precise glacier boundary segmentation.</div>
+        <div style="display:flex;gap:6px"><span class="badge badge-blue">Segmentation</span><span class="badge badge-teal">Skip Connections</span></div>
+      </div>
+      <div class="card" style="padding:20px">
+        <div style="font-weight:800;font-size:15px;color:var(--blue-d);margin-bottom:8px">DeepLabv3+</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:12px">State-of-the-art semantic segmentation using atrous spatial pyramid pooling and decoder refinement.</div>
+        <div style="display:flex;gap:6px"><span class="badge badge-blue">Semantic Seg.</span><span class="badge badge-teal">ASPP/SOTA</span></div>
+      </div>
+    </div>
+
+    <!-- Research Significance -->
+    <div class="section-header">
+      <div class="section-title">Research Significance</div>
+      <div style="font-size:12px;color:var(--text2)">Why glacier monitoring matters — from water security to global climate change mitigation</div>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:40px">
+      <div class="card" style="padding:24px">
+        <div style="font-size:24px;margin-bottom:15px">🌡️</div>
+        <div style="font-weight:800;font-size:16px;margin-bottom:10px">Climate Monitoring</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">Track temperature-driven glacier recession with satellite-derived LST data across high-altitude regions.</div>
+      </div>
+      <div class="card" style="padding:24px">
+        <div style="font-size:24px;margin-bottom:15px">💧</div>
+        <div style="font-weight:800;font-size:16px;margin-bottom:10px">Water Security</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">Monitor glacial meltwater contribution to river systems supporting over 2 billion people downstream.</div>
+      </div>
+      <div class="card" style="padding:24px">
+        <div style="font-size:24px;margin-bottom:15px">⚠️</div>
+        <div style="font-weight:800;font-size:16px;margin-bottom:10px">Disaster Prediction</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">Identify glacial lake outburst flood (GLOF) risks through automated water body expansion detection.</div>
+      </div>
+      <div class="card" style="padding:24px">
+        <div style="font-size:24px;margin-bottom:15px">🏔️</div>
+        <div style="font-weight:800;font-size:16px;margin-bottom:10px">Ecosystem Analysis</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">Assess habitat changes in fragile alpine ecosystems as glacier boundaries shift with warming trends.</div>
+      </div>
+      <div class="card" style="padding:24px">
+        <div style="font-size:24px;margin-bottom:15px">🌊</div>
+        <div style="font-weight:800;font-size:16px;margin-bottom:10px">Sea Level Impact</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">Quantify glacier mass balance contributions to global sea level rise projections and climate models.</div>
+      </div>
+      <div class="card" style="padding:24px">
+        <div style="font-size:24px;margin-bottom:15px">📜</div>
+        <div style="font-weight:800;font-size:16px;margin-bottom:10px">Policy Support</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">Provide data-driven evidence for climate policy and international cooperation on emissions reduction.</div>
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+</html>

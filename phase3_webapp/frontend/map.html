@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GlacierAI — Map View</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
+  <link rel="stylesheet" href="/static/styles.css"/>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">🏔 <span>Glacier</span>AI</div>
+    <div class="nav-tabs">
+      <a href="/" class="nav-tab">🏠 Home</a>
+      <a href="/map" class="nav-tab active">🗺 Map View</a>
+      <a href="/explorer" class="nav-tab">📊 Data Explorer</a>
+      <a href="/results" class="nav-tab">📈 Results <span class="nav-badge">5 models</span></a>
+      <a href="/analytics" class="nav-tab">🔬 Analytics</a>
+      <a href="/sandbox" class="nav-tab">🧪 Sandbox</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <!-- Top Stats Bar -->
+    <div class="grid-4" style="margin-bottom:24px">
+      <div class="stat-pill">
+        <div class="label">Total Study Area</div>
+        <div class="value" id="top-area">346.1 km²</div>
+        <div class="sub">Glacial extent (2025)</div>
+      </div>
+      <div class="stat-pill teal">
+        <div class="label">Mean LST</div>
+        <div class="value" id="top-temp">-9.2°C</div>
+        <div class="sub">Landsat-9 Thermal</div>
+      </div>
+      <div class="stat-pill amber">
+        <div class="label">Mean NDSI</div>
+        <div class="value" id="top-ndsi">0.57</div>
+        <div class="sub">Snow cover index</div>
+      </div>
+      <div class="stat-pill coral">
+        <div class="label">Analysis Year</div>
+        <div class="value" id="top-year">2025</div>
+        <div class="sub">Satellite temporal filter</div>
+      </div>
+    </div>
+
+    <div class="map-layout-research">
+      <!-- Left Sidebar: Glacier Details -->
+      <div class="map-sidebar-left">
+        <div class="card" id="glacier-details-card" style="height:100%;display:flex;flex-direction:column">
+          <div style="margin-bottom:20px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+              <h2 style="font-size:22px;color:var(--blue-d);line-height:1.2" id="g-name">Siachen Glacier</h2>
+              <button class="btn-close" style="background:var(--blue-l);border:none;color:var(--text2);cursor:pointer;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center">×</button>
+            </div>
+            <div style="font-size:12px;color:var(--text2);font-weight:500" id="g-coords">35.3162°N, 77.0256°E</div>
+          </div>
+
+          <div class="sidebar-scroll">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+              <div style="background:var(--bg);padding:12px;border-radius:var(--radius-sm);border:1px solid var(--border)">
+                <div style="font-size:10px;color:var(--text2);text-transform:uppercase;font-weight:700;margin-bottom:4px">Area 2018</div>
+                <div style="font-size:16px;font-weight:800;color:var(--blue-d)" id="g-area-start">72.5 km²</div>
+              </div>
+              <div style="background:var(--teal-l);padding:12px;border-radius:var(--radius-sm);border:1px solid var(--teal)">
+                <div style="font-size:10px;color:var(--teal-d);text-transform:uppercase;font-weight:700;margin-bottom:4px">Area 2025</div>
+                <div style="font-size:16px;font-weight:800;color:var(--teal-d)" id="g-area-end">64.2 km²</div>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
+              <div class="map-popup-row"><span>🏔 Elevation</span><span id="g-elev">4202 m</span></div>
+              <div class="map-popup-row"><span>❄️ NDSI Index</span><span id="g-ndsi">0.425</span></div>
+              <div class="map-popup-row"><span>🌊 NDWI Index</span><span id="g-ndwi">-0.001</span></div>
+              <div class="map-popup-row"><span>🌡 Surface Temp</span><span style="color:var(--coral)" id="g-lst">10.0°C</span></div>
+              <div class="map-popup-row"><span>📉 Melt Rate</span><span style="color:var(--coral)" id="g-melt">1.50 km²/yr</span></div>
+              <div class="map-popup-row" style="border:none"><span>💧 Total Area Lost</span><span style="color:var(--coral)" id="g-lost">-8.3 km² (11.4%)</span></div>
+            </div>
+
+            <div style="margin-bottom:24px">
+              <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:8px">
+                <span style="color:var(--text2)">REMAINING AREA</span>
+                <span style="color:var(--teal-d)" id="g-remain-pct">88.6%</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" id="g-progress" style="width:88.6%"></div></div>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--blue-l);border-radius:var(--radius-sm)">
+              <span style="font-size:12px;font-weight:700;color:var(--blue)">CLASSIFICATION</span>
+              <span class="nav-badge" id="g-class" style="margin:0;padding:4px 12px;font-size:11px">GLACIER</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Map Area -->
+      <div id="map-container"></div>
+
+      <!-- Right Sidebar: Controls -->
+      <div class="map-sidebar-right">
+        <div class="card" style="height:100%;display:flex;flex-direction:column">
+          <div class="card-title" style="margin-bottom:24px">
+            <div style="width:32px;height:32px;background:var(--teal-l);color:var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px">🗺</div>
+            Map Intelligence
+          </div>
+
+          <div class="sidebar-scroll">
+            <div class="time-slider-container" style="margin-bottom:24px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+                <span style="font-size:13px;font-weight:700;color:var(--blue-d)">Year: <span id="year-label-r">2025</span></span>
+                <button id="play-btn" class="btn btn-teal" style="padding:4px 12px;font-size:11px" onclick="playTimelapse()">▶ PLAY</button>
+              </div>
+              <input type="range" class="time-slider" id="year-slider" min="2018" max="2025" value="2025" oninput="updateYear(this.value)">
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text2);margin-top:8px;font-weight:600">
+                <span>2018</span><span>2025</span>
+              </div>
+            </div>
+
+            <div style="margin-bottom:24px">
+              <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--blue-d);margin-bottom:12px">
+                <span>Layer Opacity</span>
+                <span id="opacity-label">80%</span>
+              </div>
+              <input type="range" class="time-slider" min="0" max="100" value="80" oninput="updateOpacity(this.value)">
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div>
+                <div class="control-section-header">Base Datasets</div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <div class="layer-item-modern">
+                    <span style="font-size:13px;font-weight:600">RGB Satellite</span>
+                    <div class="layer-toggle-modern active" onclick="toggleLayer('rgb')"></div>
+                  </div>
+                  <div class="layer-item-modern">
+                    <span style="font-size:13px;font-weight:600">DEM Elevation</span>
+                    <div class="layer-toggle-modern" onclick="toggleLayer('dem')"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="control-section-header">Research Overlays</div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <div class="layer-item-modern">
+                    <span style="font-size:13px;font-weight:600">AI Segmentation</span>
+                    <div class="layer-toggle-modern" onclick="toggleLayer('seg')"></div>
+                  </div>
+                  <div class="layer-item-modern">
+                    <span style="font-size:13px;font-weight:600">Melt Heatmap</span>
+                    <div class="layer-toggle-modern" onclick="toggleLayer('heat')"></div>
+                  </div>
+                  <div class="layer-item-modern">
+                    <span style="font-size:13px;font-weight:600">Area Change</span>
+                    <div class="layer-toggle-modern" onclick="toggleLayer('change')"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="control-section-header">Spectral Analysis</div>
+                <div class="layer-item-modern">
+                  <span style="font-size:13px;font-weight:600">NDSI Index</span>
+                  <div class="layer-toggle-modern" onclick="toggleLayer('ndsi')"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/static/app.js"></script>
+  <script>window.onload = initMap;</script>
+</body>
+</html>

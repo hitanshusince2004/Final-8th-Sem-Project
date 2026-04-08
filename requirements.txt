@@ -1,0 +1,27 @@
+# Core Dependencies
+numpy
+pandas
+matplotlib
+seaborn
+scipy
+scikit-learn
+tqdm
+argparse
+
+# Deep Learning
+torch
+torchvision
+
+# GIS & Earth Engine
+earthengine-api
+geemap
+
+# Web App (Backend)
+fastapi
+uvicorn
+python-multipart
+
+# Others
+python-dotenv
+pillow
+opencv-python
