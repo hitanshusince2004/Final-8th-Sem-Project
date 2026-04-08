@@ -1,0 +1,8 @@
+{
+  "MAE": 0.0003,
+  "MSE": 0.0,
+  "RMSE": 0.0004,
+  "R2": 1.0,
+  "split": "test",
+  "model": "Linear Regression"
+}

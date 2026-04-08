@@ -1,0 +1,8 @@
+{
+  "MAE": 0.029,
+  "MSE": 0.0023,
+  "RMSE": 0.048,
+  "R2": 0.9977,
+  "split": "test",
+  "model": "Random Forest Regressor"
+}

@@ -1,0 +1,8 @@
+{
+  "MAE": 0.062,
+  "MSE": 0.0056,
+  "RMSE": 0.0748,
+  "R2": 0.9944,
+  "split": "test",
+  "model": "ElasticNet Regression"
+}

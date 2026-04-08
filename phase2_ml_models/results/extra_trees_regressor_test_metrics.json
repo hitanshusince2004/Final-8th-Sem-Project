@@ -1,0 +1,8 @@
+{
+  "MAE": 0.0562,
+  "MSE": 0.0062,
+  "RMSE": 0.0784,
+  "R2": 0.9938,
+  "split": "test",
+  "model": "Extra Trees Regressor"
+}

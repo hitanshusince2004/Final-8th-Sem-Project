@@ -1,0 +1,8 @@
+{
+  "MAE": 0.0831,
+  "MSE": 0.0099,
+  "RMSE": 0.0995,
+  "R2": 0.99,
+  "split": "test",
+  "model": "Lasso Regression"
+}

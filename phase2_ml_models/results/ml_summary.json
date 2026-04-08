@@ -1,0 +1,87 @@
+{
+  "Ridge Regression": {
+    "MAE": 0.0012,
+    "MSE": 0.0,
+    "RMSE": 0.0013,
+    "R2": 1.0,
+    "split": "test",
+    "model": "Ridge Regression"
+  },
+  "Lasso Regression": {
+    "MAE": 0.0831,
+    "MSE": 0.0099,
+    "RMSE": 0.0995,
+    "R2": 0.99,
+    "split": "test",
+    "model": "Lasso Regression"
+  },
+  "ElasticNet Regression": {
+    "MAE": 0.062,
+    "MSE": 0.0056,
+    "RMSE": 0.0748,
+    "R2": 0.9944,
+    "split": "test",
+    "model": "ElasticNet Regression"
+  },
+  "Random Forest Regressor": {
+    "MAE": 0.029,
+    "MSE": 0.0023,
+    "RMSE": 0.048,
+    "R2": 0.9977,
+    "split": "test",
+    "model": "Random Forest Regressor"
+  },
+  "Extra Trees Regressor": {
+    "MAE": 0.0562,
+    "MSE": 0.0062,
+    "RMSE": 0.0784,
+    "R2": 0.9938,
+    "split": "test",
+    "model": "Extra Trees Regressor"
+  },
+  "Logistic Regression (Binary)": {
+    "Accuracy": 0.9912,
+    "Precision": 0.9251,
+    "Recall": 1.0,
+    "F1": 0.9611,
+    "AUC_ROC": 0.9996,
+    "split": "test",
+    "model": "Logistic Regression"
+  },
+  "Random Forest Classifier (Binary)": {
+    "Accuracy": 0.9967,
+    "Precision": 0.9784,
+    "Recall": 0.9912,
+    "F1": 0.9848,
+    "AUC_ROC": 0.9999,
+    "split": "test",
+    "model": "Random Forest Classifier"
+  },
+  "Extra Trees Classifier (Binary)": {
+    "Accuracy": 0.9933,
+    "Precision": 0.9516,
+    "Recall": 0.9891,
+    "F1": 0.97,
+    "AUC_ROC": 0.9997,
+    "split": "test",
+    "model": "Extra Trees Classifier"
+  },
+  "Random Forest Classifier (Multiclass)": {
+    "Accuracy": 0.9879,
+    "Precision": 0.4853,
+    "Recall": 0.4952,
+    "F1": 0.4902,
+    "AUC_ROC": 0.9898,
+    "split": "test",
+    "model": "Random Forest Classifier"
+  },
+  "Extra Trees Classifier (Multiclass)": {
+    "Accuracy": 0.9862,
+    "Precision": 0.4839,
+    "Recall": 0.4944,
+    "F1": 0.489,
+    "AUC_ROC": 0.9883,
+    "split": "test",
+    "model": "Extra Trees Classifier"
+  }
+}

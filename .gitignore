@@ -156,15 +156,28 @@ cython_debug/
 .vscode/
 
 # Project Specific
-local_dataset/
-results/
+local_dataset/**
+!phase1_data_generation/local_dataset/numerical/numerical_2025_melt.csv
+!phase1_data_generation/local_dataset/numerical/numerical_2025_winter.csv
+!phase1_data_generation/local_dataset/sample_previews/
+!phase1_data_generation/local_dataset/sample_previews/**
+
+results/**
+!phase2_ml_models/results/
+!phase2_ml_models/results/**
+
 **/__pycache__/
 *.png
+!phase2_ml_models/results/*.png
+!phase1_data_generation/local_dataset/sample_previews/*.png
 *.jpg
+!phase1_data_generation/local_dataset/sample_previews/*.jpg
 *.jpeg
 *.tif
 *.tiff
 *.csv
+!phase1_data_generation/local_dataset/numerical/numerical_2025_melt.csv
+!phase1_data_generation/local_dataset/numerical/numerical_2025_winter.csv
 *.h5
 *.pth
 *.joblib
