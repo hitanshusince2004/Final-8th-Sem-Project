@@ -158,7 +158,7 @@ class GlacierSegTrainer:
         n_batches  = len(self.train_loader)
         
         # Limit training batches on CPU to ensure completion
-        max_train_batches = self.config.get("max_train_batches", 500)
+        max_train_batches = self.config.get("max_train_batches", 20)
 
         for i, (images, labels) in enumerate(self.train_loader):
             if i >= max_train_batches:
@@ -208,7 +208,7 @@ class GlacierSegTrainer:
         gc.collect()
 
         # Limit validation batches to save time and memory on CPU
-        max_val_batches = self.config.get("max_val_batches", 50)
+        max_val_batches = self.config.get("max_val_batches", 5)
         
         for i, (images, labels) in enumerate(self.val_loader):
             if i >= max_val_batches:
@@ -354,10 +354,11 @@ class GlacierSegTrainer:
         from sklearn.metrics import ConfusionMatrixDisplay
         import seaborn as sns
         import gc
+        import numpy as np
 
         save_dir = save_dir or RESULTS_DIR
         os.makedirs(save_dir, exist_ok=True)
-        base_path = os.path.join(save_dir, f"{self.model_name}")
+        base_path = os.path.join(save_dir, f"{self.model_name.lower()}")
 
         # 1. Training Curves
         self.plot_training_curves(save_path=f"{base_path}_training_curves.png")
@@ -371,7 +372,7 @@ class GlacierSegTrainer:
         samples_to_viz = 3
         viz_count = 0
         
-        # Subsample for confusion matrix to avoid memory OOM (max 2M pixels total)
+        # Subsample for confusion matrix to avoid memory OOM
         max_total_pixels = 2_000_000
         total_pixels_collected = 0
         
@@ -389,84 +390,91 @@ class GlacierSegTrainer:
                     all_preds.append(preds.numpy().astype(np.uint8))
                     all_labels.append(labels_clf.numpy().astype(np.uint8))
                 else:
-                    # Subsample pixels for segmentation to avoid OOM
-                    # Keep only every Nth pixel if needed
-                    B, H, W = labels_cpu.shape
-                    batch_pixels = B * H * W
-                    
+                    # Collect subset for confusion matrix
+                    p = preds.numpy().astype(np.uint8).flatten()
+                    l = labels_cpu.numpy().astype(np.uint8).flatten()
                     if total_pixels_collected < max_total_pixels:
-                        # For segmentation, we take a subset of batches or a subset of pixels
-                        # Let's just take the first few batches until we hit the limit
-                        p = preds.numpy().astype(np.uint8).flatten()
-                        l = labels_cpu.numpy().astype(np.uint8).flatten()
                         all_preds.append(p)
                         all_labels.append(l)
-                        total_pixels_collected += batch_pixels
+                        total_pixels_collected += len(p)
                 
+                # Visualizations (Overlay / Predicted vs Actual)
                 if viz_count < samples_to_viz:
-                    for i in range(min(images.size(0), samples_to_viz - viz_count)):
-                        if not is_clf:
-                            fig, axes = plt.subplots(1, 2, figsize=(10, 5))
-                            axes[0].imshow(labels_cpu[i].numpy(), cmap="tab10")
-                            axes[0].set_title(f"Actual Mask (S{viz_count+1})")
-                            axes[1].imshow(preds[i].numpy(), cmap="tab10")
-                            axes[1].set_title(f"Predicted Mask (S{viz_count+1})")
-                            plt.tight_layout()
-                            plt.savefig(f"{base_path}_sample_{viz_count+1}_pred_vs_actual.png")
-                            plt.close()
-                            gc.collect()
-                        viz_count += 1
-                
-                del images, labels_cpu, logits, preds
-                gc.collect()
-                
-        if not all_preds: return # Avoid error if empty
+                    viz_count += 1
+                    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
+                    # Pick first image in batch
+                    img_v = images[0].detach().cpu().numpy()[:3].transpose(1, 2, 0)
+                    # Normalize RGB for display
+                    for c in range(3):
+                        p2, p98 = np.percentile(img_v[:,:,c], (2, 98))
+                        img_v[:,:,c] = np.clip((img_v[:,:,c] - p2) / (p98 - p2 + 1e-8), 0, 1)
+                    
+                    ax1.imshow(img_v)
+                    ax1.set_title("Input RGB")
+                    
+                    if not is_clf:
+                        pred_v = preds[0].numpy()
+                        label_v = labels_cpu[0].numpy()
+                        ax2.imshow(label_v, cmap="viridis")
+                        ax2.set_title("Ground Truth")
+                        ax3.imshow(pred_v, cmap="viridis")
+                        ax3.set_title("Predicted Mask")
+                    else:
+                        ax2.text(0.5, 0.5, f"Label: {labels_clf[0]}", ha="center")
+                        ax3.text(0.5, 0.5, f"Pred: {preds[0]}", ha="center")
+                        ax2.set_title("Actual")
+                        ax3.set_title("Predicted")
+                    
+                    plt.tight_layout()
+                    plt.savefig(f"{base_path}_sample_{viz_count}_pred_vs_actual.png")
+                    plt.close()
 
-        all_preds = np.concatenate(all_preds).flatten()
-        all_labels = np.concatenate(all_labels).flatten()
-        
-        # 3. Confusion Matrix
-        classes = ["Land", "Snow/Ice", "Water", "Debris"]
-        present_classes = np.unique(np.concatenate([all_labels, all_preds])).astype(int)
-        display_labels = [classes[i] for i in present_classes]
-        
-        fig, ax = plt.subplots(figsize=(10, 8))
-        ConfusionMatrixDisplay.from_predictions(
-            all_labels, all_preds, labels=present_classes, 
-            display_labels=display_labels,
-            cmap="Blues", normalize="true", ax=ax
-        )
-        ax.set_title(f"{self.model_name} — Confusion Matrix")
-        plt.tight_layout()
-        plt.savefig(f"{base_path}_confusion_matrix.png")
-        plt.close()
+        # 3. Final Confusion Matrix
+        if all_preds:
+            y_pred = np.concatenate(all_preds)
+            y_true = np.concatenate(all_labels)
+            
+            fig, ax = plt.subplots(figsize=(10, 8))
+            classes = np.unique(y_true)
+            class_names = ["Non-glacier", "Glacier"] if len(classes) == 2 else ["Land", "Snow/Ice", "Water", "Debris"]
+            disp = ConfusionMatrixDisplay.from_predictions(
+                y_true, y_pred, labels=classes, display_labels=[class_names[int(i)] for i in classes],
+                cmap="Blues", normalize="true", ax=ax
+            )
+            ax.set_title(f"{self.model_name} — Confusion Matrix")
+            plt.savefig(f"{base_path}_confusion_matrix.png")
+            plt.close()
+
+        # 4. Distribution Plot (Predicted vs Actual Class Frequencies)
+        if all_preds:
+            y_pred = np.concatenate(all_preds)
+            y_true = np.concatenate(all_labels)
+            plt.figure(figsize=(10, 6))
+            
+            classes = np.unique(np.concatenate([y_true, y_pred]))
+            class_names_all = ["Non-glacier", "Glacier"] if len(classes) == 2 else ["Land", "Snow/Ice", "Water", "Debris"]
+            names = [class_names_all[int(i)] for i in classes]
+            
+            y_test_counts = [np.sum(y_true == c) for c in classes]
+            y_pred_counts = [np.sum(y_pred == c) for c in classes]
+            
+            x = np.arange(len(classes))
+            width = 0.35
+            
+            plt.bar(x - width/2, y_test_counts, width, label='Actual', color='blue', alpha=0.6)
+            plt.bar(x + width/2, y_pred_counts, width, label='Predicted', color='orange', alpha=0.6)
+            
+            plt.ylabel('Count')
+            plt.title(f'{self.model_name} — Class Distribution (Actual vs Predicted)')
+            plt.xticks(x, names)
+            plt.legend()
+            
+            plt.tight_layout()
+            plt.savefig(f"{base_path}_distribution.png")
+            plt.close()
+
+        print(f"  Comprehensive plots saved for {self.model_name}")
         gc.collect()
-
-        # 4. Class Distribution
-        fig, ax = plt.subplots(figsize=(10, 6))
-        unique_act, counts_act = np.unique(all_labels, return_counts=True)
-        unique_pred, counts_pred = np.unique(all_preds, return_counts=True)
-        
-        # Ensure all classes are represented
-        act_dist = np.zeros(len(classes))
-        pred_dist = np.zeros(len(classes))
-        for u, c in zip(unique_act, counts_act): act_dist[int(u)] = c
-        for u, c in zip(unique_pred, counts_pred): pred_dist[int(u)] = c
-        
-        x = np.arange(len(classes))
-        width = 0.35
-        ax.bar(x - width/2, act_dist, width, label="Actual", color="blue", alpha=0.6)
-        ax.bar(x + width/2, pred_dist, width, label="Predicted", color="orange", alpha=0.6)
-        ax.set_xticks(x)
-        ax.set_xticklabels(classes)
-        ax.set_title(f"{self.model_name} — Class Distribution")
-        ax.legend()
-        plt.tight_layout()
-        plt.savefig(f"{base_path}_distribution.png")
-        plt.close()
-        gc.collect()
-
-        print(f"  ✓ Comprehensive plots saved to {save_dir}")
 
     def _save_checkpoint(self, path, epoch, metrics):
         os.makedirs(os.path.dirname(path), exist_ok=True)

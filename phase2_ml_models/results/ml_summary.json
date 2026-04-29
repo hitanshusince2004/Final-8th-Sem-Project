@@ -1,4 +1,12 @@
 {
+  "Linear Regression": {
+    "MAE": 0.0,
+    "MSE": 0.0,
+    "RMSE": 0.0,
+    "R2": 1.0,
+    "split": "test",
+    "model": "Linear Regression"
+  },
   "Ridge Regression": {
     "MAE": 0.0012,
     "MSE": 0.0,

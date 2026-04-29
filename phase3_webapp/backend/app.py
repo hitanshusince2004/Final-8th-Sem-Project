@@ -130,10 +130,6 @@ def get_results():
 def get_analytics():
     return str(FRONTEND_DIR / "analytics.html")
 
-@app.get("/sandbox", response_class=FileResponse)
-def get_sandbox():
-    return str(FRONTEND_DIR / "sandbox.html")
-
 
 # ══════════════════════════════════════════════════════════════════════════════
 # STATS ENDPOINT (Home Page)
@@ -484,43 +480,57 @@ def _demo_numerical(page, limit):
 @app.get("/api/dataset/images")
 def get_image_listing(page: int = Query(1, ge=1), limit: int = Query(20, ge=1, le=100)):
     """List image patch files for the Data Explorer image view."""
-    # Pattern to find PNG versions of the patches
-    pattern = str(DATA_DIR / "patches_png" / "**" / "*.png")
-    files   = sorted(glob.glob(pattern, recursive=True))
+    # Pattern to find only RGB versions of the patches to avoid duplicates in grid
+    pattern = str(DATA_DIR / "patches_png" / "**" / "*_rgb.png")
+    rgb_files = sorted(glob.glob(pattern, recursive=True))
 
-    total  = len(files)
+    total  = len(rgb_files)
     start  = (page - 1) * limit
 
-    if files:
-        chunk = files[start:start + limit]
+    if rgb_files:
+        chunk = rgb_files[start:start + limit]
         items = []
         for f in chunk:
             p = Path(f)
-            # Relative path for serving
-            rel_path = p.relative_to(DATA_DIR).as_posix()
+            # Find sibling mask and multimask
+            mask_p = p.parent / p.name.replace("_rgb.png", "_mask.png")
+            multi_p = p.parent / p.name.replace("_rgb.png", "_multimask.png")
+            
+            # Relative paths for serving
+            rel_rgb = p.relative_to(DATA_DIR).as_posix()
+            rel_mask = mask_p.relative_to(DATA_DIR).as_posix() if mask_p.exists() else None
+            rel_multi = multi_p.relative_to(DATA_DIR).as_posix() if multi_p.exists() else None
+            
             items.append({
-                "filename": p.name,
-                "url": f"/data/{rel_path}",
+                "filename": p.name.replace("_rgb.png", ""),
+                "url": f"/data/{rel_rgb}",
+                "mask_url": f"/data/{rel_mask}" if rel_mask else None,
+                "multi_url": f"/data/{rel_multi}" if rel_multi else None,
                 "year": p.parts[-3] if len(p.parts) > 3 else "2023",
                 "season": p.parts[-2] if len(p.parts) > 2 else "melt"
             })
     else:
         # Fallback to demo if no PNGs found yet
         total = 200
-        items = [{"filename": f"glacier_patch_2023_melt_{i:04d}.png",
+        items = [{"filename": f"glacier_patch_2025_winter_{i:04d}",
                   "url":     f"https://via.placeholder.com/256/3B8BD4/FFFFFF?text=Patch+{i}",
-                  "year":     "2023", "season": "melt"}
+                  "mask_url": f"https://via.placeholder.com/256/000000/FFFFFF?text=Mask+{i}",
+                  "multi_url": f"https://via.placeholder.com/256/FAC775/FFFFFF?text=Multi+{i}",
+                  "year":     "2025", "season": "winter"}
                  for i in range(start, min(start + limit, total))]
 
     return {"total": total, "page": page, "limit": limit,
             "total_pages": math.ceil(total / limit) if total > 0 else 1, "images": items,
-            "note": "Demo images - no patches found in DATA_DIR" if not files else None}
+            "note": "Demo images - no patches found in DATA_DIR" if not rgb_files else None}
 
 
 @app.get("/api/dataset/stats")
 def get_dataset_stats():
     """Dataset statistics for the Data Explorer summary panel."""
-    meta = load_json(PROCESSED_DIR / "dataset_metadata.json")
+    # Pattern to find total valid RGB patches
+    pattern = str(DATA_DIR / "patches_png" / "**" / "*_rgb.png")
+    valid_images = len(glob.glob(pattern, recursive=True))
+    
     return {
         "numerical": {
             "total":     28000,
@@ -529,7 +539,7 @@ def get_dataset_stats():
             "years":     list(range(2018, 2026)),
         },
         "images": {
-            "total":  5600,
+            "total":  valid_images,
             "types":  ["RGB","Grayscale","Glacier Mask","Multi-class Mask",
                        "NDSI","NDWI","NIR","SWIR","LST","DEM","SAR VV","SAR VH"],
             "patch_size": 256,
@@ -547,21 +557,141 @@ def get_model_results():
     """All model evaluation metrics for the Results page."""
     summary = load_json(RESULTS_DIR / "all_models_summary.json")
 
+    # Mapping of model names to filename prefixes for plot matching
+    name_map = {
+        'Linear Regression': 'linear_regression',
+        'Ridge Regression': 'ridge_regression',
+        'Lasso Regression': 'lasso_regression',
+        'ElasticNet Regression': 'elasticnet_regression',
+        'Random Forest Regressor': 'random_forest_regressor',
+        'Extra Trees Regressor': 'extra_trees_regressor',
+        'Logistic Regression (Binary)': 'logistic_regression_binary',
+        'Random Forest Classifier (Binary)': 'random_forest_classifier_binary',
+        'Extra Trees Classifier (Binary)': 'extra_trees_classifier_binary',
+        'Random Forest Classifier (Multiclass)': 'random_forest_classifier_multiclass',
+        'Extra Trees Classifier (Multiclass)': 'extra_trees_classifier_multiclass',
+        'CNN_Basic': 'cnn_basic',
+        'CNN_ResNet18': 'cnn_resnet18',
+        'CNN_FCN': 'cnn_fcn',
+        'U-Net': 'unet',
+        'DeepLabv3+': 'deeplabv3plus'
+    }
+
+    def get_plots(model_name):
+        prefix = name_map.get(model_name)
+        if not prefix:
+            # Fallback: clean the name manually
+            prefix = model_name.lower().replace(" ", "_").replace("(", "").replace(")", "").replace("+", "plus")
+        
+        print(f"DEBUG: Searching plots for model '{model_name}' with prefix '{prefix}'")
+        
+        plots = []
+        # Search for files starting with prefix
+        for f in RESULTS_DIR.glob(f"{prefix}*.png"):
+            # Skip overall Fig files
+            if f.name.startswith("Fig"): continue
+            
+            # Clean up plot name for display
+            display_name = f.name.replace(prefix, "").replace(".png", "").strip("_").replace("_", " ").strip()
+            if not display_name: display_name = "Overview"
+            
+            plots.append({
+                "name": display_name.title(),
+                "url": f"/results_files/{f.name}"
+            })
+        
+        # Add any hardcoded matches that might be missing due to naming conventions
+        if "Linear Regression" in model_name:
+            for f in RESULTS_DIR.glob("lr_*.png"):
+                plots.append({
+                    "name": f.name.replace("lr_", "").replace(".png", "").replace("_", " ").title(),
+                    "url": f"/results_files/{f.name}"
+                })
+        if "Random Forest Regressor" in model_name:
+            for f in RESULTS_DIR.glob("rfr_*.png"):
+                plots.append({
+                    "name": f.name.replace("rfr_", "").replace(".png", "").replace("_", " ").title(),
+                    "url": f"/results_files/{f.name}"
+                })
+        if "Random Forest Classifier (Binary)" in model_name:
+            for f in RESULTS_DIR.glob("rfc_binary_*.png"):
+                plots.append({
+                    "name": f.name.replace("rfc_binary_", "").replace(".png", "").replace("_", " ").title(),
+                    "url": f"/results_files/{f.name}"
+                })
+        if "Random Forest Classifier (Multiclass)" in model_name:
+            for f in RESULTS_DIR.glob("rfc_multiclass_*.png"):
+                plots.append({
+                    "name": f.name.replace("rfc_multiclass_", "").replace(".png", "").replace("_", " ").title(),
+                    "url": f"/results_files/{f.name}"
+                })
+        
+        print(f"DEBUG: Found {len(plots)} plots for {model_name}")
+        return sorted(plots, key=lambda x: x["name"])
+
     if summary:
-        return {"models": summary, "source": "real"}
+        # Enrich summary with available plots
+        for name in summary:
+            summary[name]["plots"] = get_plots(name)
+        
+        # Also add overall research figures
+        overall_figures = []
+        for f in RESULTS_DIR.glob("Fig*.png"):
+            overall_figures.append({
+                "name": f.name.replace(".png", "").replace("_", " "),
+                "url": f"/results_files/{f.name}"
+            })
+
+        return {
+            "models": summary, 
+            "overall_figures": overall_figures,
+            "source": "real"
+        }
 
     # Demo results when not yet trained
     return {
         "source": "demo",
         "note": "Demo results - load trained models for real data",
         "models": {
-            "Linear Regression": {
+            "Linear Regression (Std)": {
                 "task": "regression", "type": "ML",
                 "MAE": 2.34, "MSE": 8.72, "RMSE": 2.95, "R2": 0.87,
+                "plots": [{"name": "Predicted vs Actual", "url": "https://via.placeholder.com/400x300?text=Linear+Regression+Plot"}]
             },
-            "Random Forest": {
+            "Ridge Regression": {
+                "task": "regression", "type": "ML",
+                "MAE": 2.30, "MSE": 8.50, "RMSE": 2.91, "R2": 0.88,
+                "plots": [{"name": "Coefficients", "url": "https://via.placeholder.com/400x300?text=Ridge+Regression+Plot"}]
+            },
+            "Lasso Regression": {
+                "task": "regression", "type": "ML",
+                "MAE": 2.40, "MSE": 9.00, "RMSE": 3.00, "R2": 0.86,
+                "plots": []
+            },
+            "Random Forest Regressor": {
                 "task": "regression", "type": "ML",
                 "MAE": 1.56, "MSE": 4.21, "RMSE": 2.05, "R2": 0.93,
+                "plots": [{"name": "Feature Importance", "url": "https://via.placeholder.com/400x300?text=Random+Forest+Plot"}]
+            },
+            "Extra Trees Regressor": {
+                "task": "regression", "type": "ML",
+                "MAE": 1.50, "MSE": 4.00, "RMSE": 2.00, "R2": 0.94,
+                "plots": []
+            },
+            "Random Forest Classifier (Binary)": {
+                "task": "classification", "type": "ML",
+                "Accuracy": 0.942, "Precision": 0.938, "Recall": 0.945, "F1": 0.941, "AUC_ROC": 0.967,
+                "plots": [{"name": "Confusion Matrix", "url": "https://via.placeholder.com/400x300?text=Confusion+Matrix"}]
+            },
+            "CNN_Basic": {
+                "task": "classification", "type": "DL",
+                "Accuracy": 0.882, "Precision": 0.875, "Recall": 0.891, "F1": 0.883, "mIoU": 0.751,
+                "plots": []
+            },
+            "CNN_ResNet18": {
+                "task": "classification", "type": "DL",
+                "Accuracy": 0.912, "Precision": 0.905, "Recall": 0.921, "F1": 0.913, "mIoU": 0.812,
+                "plots": []
             },
             "CNN (GlacierFCN)": {
                 "task": "segmentation", "type": "DL",
@@ -569,6 +699,7 @@ def get_model_results():
                 "F1": 0.924, "mIoU": 0.862, "mDice": 0.926, "AUC_ROC": 0.967,
                 "IoU_per_class":  [0.912, 0.845, 0.783, 0.791],
                 "Dice_per_class": [0.954, 0.916, 0.878, 0.883],
+                "plots": [{"name": "Sample Segmentation", "url": "https://via.placeholder.com/400x300?text=FCN+Sample"}]
             },
             "U-Net": {
                 "task": "segmentation", "type": "DL",
@@ -576,6 +707,7 @@ def get_model_results():
                 "F1": 0.951, "mIoU": 0.908, "mDice": 0.952, "AUC_ROC": 0.983,
                 "IoU_per_class":  [0.961, 0.924, 0.881, 0.887],
                 "Dice_per_class": [0.980, 0.960, 0.937, 0.940],
+                "plots": []
             },
             "DeepLabv3+": {
                 "task": "segmentation", "type": "DL",
@@ -583,9 +715,12 @@ def get_model_results():
                 "F1": 0.968, "mIoU": 0.938, "mDice": 0.968, "AUC_ROC": 0.991,
                 "IoU_per_class":  [0.975, 0.948, 0.912, 0.918],
                 "Dice_per_class": [0.987, 0.973, 0.954, 0.957],
+                "plots": []
             },
-        }
+        },
+        "overall_figures": []
     }
+    
 
 
 @app.get("/api/models/training_history/{model_name}")

@@ -8,88 +8,101 @@
 </head>
 <body>
   <nav>
-    <div class="nav-brand">🏔 <span>Glacier</span>AI</div>
+    <div class="nav-brand">🏔️ <span>Glacier</span>AI</div>
     <div class="nav-tabs">
-      <a href="/" class="nav-tab">🏠 Home</a>
-      <a href="/map" class="nav-tab">🗺 Map View</a>
-      <a href="/explorer" class="nav-tab active">📊 Data Explorer</a>
-      <a href="/results" class="nav-tab">📈 Results <span class="nav-badge">5 models</span></a>
-      <a href="/analytics" class="nav-tab">🔬 Analytics</a>
-      <a href="/sandbox" class="nav-tab">🧪 Sandbox</a>
+      <a href="/" class="nav-tab">Home</a>
+      <a href="/map" class="nav-tab">Map View</a>
+      <a href="/explorer" class="nav-tab active">Data Explorer</a>
+      <a href="/results" class="nav-tab">Results <span class="nav-badge">5 models</span></a>
+      <a href="/analytics" class="nav-tab">Analytics</a>
     </div>
   </nav>
 
   <div class="page">
-    <div style="margin-bottom:24px;display:flex;justify-content:space-between;align-items:flex-end">
+    <div style="margin-bottom:40px; display:flex; justify-content:space-between; align-items:flex-end">
       <div>
-        <div style="font-size:24px;font-weight:900;margin-bottom:4px;color:var(--blue-d)">Multi-Modal Data Explorer</div>
-        <div style="font-size:14px;color:var(--text2)">Access high-resolution numerical pixel samples and multispectral image patches (2018–2025)</div>
+        <h1 class="research-font" style="font-size:36px; color:var(--primary); margin-bottom:8px">Multi-Modal Data Explorer</h1>
+        <p style="font-size:15px; color:var(--text-muted)">Access high-resolution numerical pixel samples and multispectral image patches (2018–2025)</p>
       </div>
-      <div style="display:flex;gap:10px">
-        <div class="badge badge-blue">Numerical: 28,000+</div>
-        <div class="badge badge-teal">Images: 5,000+</div>
+      <div style="display:flex; gap:12px">
+        <span class="badge badge-info">Numerical: 28,000+</span>
+        <span class="badge badge-success">Images: 5,000+</span>
       </div>
     </div>
 
-    <div class="tabs" style="margin-bottom:32px">
-      <div class="tab active" onclick="switchExplorerTab('numerical',this)">📋 Numerical Pixel Samples</div>
-      <div class="tab" onclick="switchExplorerTab('images',this)">🖼 Multispectral Image Patches</div>
+    <div class="nav-tabs" style="background:var(--bg-card); border-radius:var(--radius-md); padding:8px; margin-bottom:40px; display:inline-flex; width:auto; height:auto; box-shadow:var(--shadow-sm); border:1px solid var(--border-light)">
+      <div class="nav-tab active" onclick="switchExplorerTab('numerical',this)" style="cursor:pointer; color:var(--text-muted)">📋 Numerical Pixel Samples</div>
+      <div class="nav-tab" onclick="switchExplorerTab('images',this)" style="cursor:pointer; color:var(--text-muted)">🖼️ Multispectral Image Patches</div>
     </div>
 
     <div class="tab-panel active" id="tab-numerical">
-      <div class="card" style="margin-bottom:24px;padding:20px">
-        <div class="filter-bar">
-          <div style="display:flex;gap:12px;align-items:center">
-            <span style="font-size:12px;font-weight:800;color:var(--text2);text-transform:uppercase">Filters:</span>
-            <select id="filter-year" onchange="loadNumerical()" style="min-width:120px">
-              <option value="">Temporal: All</option>
+      <div class="card" style="margin-bottom:32px">
+        <div style="display:flex; gap:24px; align-items:center; flex-wrap:wrap">
+          <div style="display:flex; gap:12px; align-items:center">
+            <span class="control-label" style="margin:0">Temporal Filter</span>
+            <select id="filter-year" onchange="loadNumerical()" class="btn btn-outline" style="min-width:140px">
+              <option value="">All Years</option>
               <option>2018</option><option>2019</option><option>2020</option><option>2021</option>
               <option>2022</option><option selected>2023</option><option>2024</option><option>2025</option>
             </select>
-            <select id="filter-season" onchange="loadNumerical()" style="min-width:150px">
-              <option value="">Season: All</option>
+          </div>
+          <div style="display:flex; gap:12px; align-items:center">
+            <span class="control-label" style="margin:0">Seasonal</span>
+            <select id="filter-season" onchange="loadNumerical()" class="btn btn-outline" style="min-width:180px">
+              <option value="">All Seasons</option>
               <option value="melt">Melt Season (May–Sep)</option>
               <option value="winter">Accumulation (Nov–Mar)</option>
             </select>
-            <select id="filter-glacier" onchange="loadNumerical()" style="min-width:140px">
-              <option value="">Class: All</option>
+          </div>
+          <div style="display:flex; gap:12px; align-items:center">
+            <span class="control-label" style="margin:0">Classification</span>
+            <select id="filter-glacier" onchange="loadNumerical()" class="btn btn-outline" style="min-width:160px">
+              <option value="">All Classes</option>
               <option value="1">Glacier Surface</option>
               <option value="0">Periglacial Land</option>
             </select>
           </div>
           <div style="flex:1"></div>
-          <div style="display:flex;gap:8px">
-            <button class="btn btn-outline" onclick="resetFilters()">Reset</button>
-            <button class="btn btn-primary" onclick="loadNumerical()">🔍 Query</button>
+          <div style="display:flex; gap:12px">
+            <button class="btn btn-outline" onclick="resetFilters()">Reset Filters</button>
+            <button class="btn btn-primary" onclick="loadNumerical()">🔍 Apply Query</button>
           </div>
         </div>
       </div>
 
-      <div class="table-wrap" style="box-shadow:var(--shadow)">
-        <table class="data-table" id="numerical-table">
+      <div class="table-container">
+        <table id="numerical-table">
           <thead id="numerical-head"></thead>
           <tbody id="numerical-body"></tbody>
         </table>
       </div>
-      <div class="pagination" id="numerical-pagination"></div>
+      <div class="pagination" id="numerical-pagination" style="margin-top:24px; display:flex; justify-content:center; gap:8px"></div>
     </div>
 
     <div class="tab-panel" id="tab-images">
-      <div class="card" style="margin-bottom:24px;padding:20px">
-        <div style="display:flex;gap:12px;align-items:center">
-          <span style="font-size:12px;font-weight:800;color:var(--text2);text-transform:uppercase">Dataset:</span>
-          <select id="img-year" style="min-width:120px"><option value="">Year: All</option><option>2022</option><option selected>2023</option></select>
-          <select id="img-season" style="min-width:120px"><option value="">Season: All</option><option value="melt" selected>Melt</option><option value="winter">Winter</option></select>
+      <div class="card" style="margin-bottom:32px">
+        <div style="display:flex; gap:24px; align-items:center; flex-wrap:wrap">
+          <div style="display:flex; gap:12px; align-items:center">
+            <span class="control-label" style="margin:0">Dataset Filter</span>
+            <select id="img-year" class="btn btn-outline" style="min-width:140px">
+              <option value="">Year: All</option><option>2022</option><option selected>2023</option>
+            </select>
+            <select id="img-season" class="btn btn-outline" style="min-width:140px">
+              <option value="">Season: All</option><option value="melt" selected>Melt</option><option value="winter">Winter</option>
+            </select>
+          </div>
           <div style="flex:1"></div>
-          <button class="btn btn-primary" onclick="loadImages()">Apply Filters</button>
+          <button class="btn btn-primary" onclick="loadImages()">🔍 Refresh Patches</button>
         </div>
       </div>
-      <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
-        <div style="font-size:13px;font-weight:600;color:var(--text2)" id="img-count"></div>
-        <div style="font-size:11px;color:var(--teal);font-weight:700">Displaying: RGB + Glacier Mask Preview</div>
+      
+      <div style="margin-bottom:24px; display:flex; justify-content:space-between; align-items:center">
+        <div style="font-size:15px; font-weight:700; color:var(--primary)" id="img-count"></div>
+        <div class="badge badge-info">Multi-Spectral + Glacier Mask</div>
       </div>
-      <div class="explorer-grid" id="image-grid"></div>
-      <div class="pagination" id="image-pagination"></div>
+
+      <div class="image-grid" id="image-grid"></div>
+      <div class="pagination" id="image-pagination" style="margin-top:32px; display:flex; justify-content:center; gap:8px"></div>
     </div>
   </div>
   <script src="/static/app.js"></script>

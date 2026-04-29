@@ -75,6 +75,26 @@ def compile_summary(all_results):
 
     # Save
     path = os.path.join(RESULTS_DIR, "all_models_summary.json")
+    
+    # Enrichment: Add task and type to results if missing
+    enriched_results = {}
+    for name, metrics in all_results.items():
+        enriched = metrics.copy()
+        
+        # Determine task
+        if "MAE" in enriched or "R2" in enriched:
+            enriched["task"] = "regression"
+        else:
+            enriched["task"] = "segmentation"
+            
+        # Determine type
+        if "CNN" in name or "U-Net" in name or "DeepLab" in name:
+            enriched["type"] = "DL"
+        else:
+            enriched["type"] = "ML"
+            
+        enriched_results[name] = enriched
+
     with open(path, "w") as f:
         # Convert numpy types for JSON
         def convert(obj):
@@ -84,9 +104,9 @@ def compile_summary(all_results):
                 return obj.tolist()
             return obj
         json.dump({k: {mk: convert(mv) for mk, mv in v.items()}
-                   for k, v in all_results.items()}, f, indent=2)
+                   for k, v in enriched_results.items()}, f, indent=2)
     print(f"\n  Summary saved → {path}")
-    return all_results
+    return enriched_results
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -149,6 +169,30 @@ def main():
     # ── Summary ───────────────────────────────────────────────────────────────
     if all_results:
         compile_summary(all_results)
+        
+        # ── Research Plots ────────────────────────────────────────────────────
+        print("\n" + "═"*60)
+        print("  GENERATING RESEARCH-GRADE PLOTS")
+        print("═"*60)
+        from training.generate_research_plots import (
+            generate_fig2, generate_fig2b, generate_fig3, 
+            generate_fig4, generate_fig5, generate_fig6, generate_fig7
+        )
+        try: generate_fig2()
+        except Exception as e: print(f"Error generating Fig 2: {e}")
+        try: generate_fig2b()
+        except Exception as e: print(f"Error generating Fig 2b: {e}")
+        try: generate_fig3()
+        except Exception as e: print(f"Error generating Fig 3: {e}")
+        try: generate_fig4()
+        except Exception as e: print(f"Error generating Fig 4: {e}")
+        try: generate_fig5()
+        except Exception as e: print(f"Error generating Fig 5: {e}")
+        try: generate_fig6()
+        except Exception as e: print(f"Error generating Fig 6: {e}")
+        try: generate_fig7()
+        except Exception as e: print(f"Error generating Fig 7: {e}")
+        print(f"\n  All research figures generated in {RESULTS_DIR}")
 
 
 if __name__ == "__main__":

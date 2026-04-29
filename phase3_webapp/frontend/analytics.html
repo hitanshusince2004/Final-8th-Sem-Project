@@ -9,130 +9,150 @@
 </head>
 <body>
   <nav>
-    <div class="nav-brand">🏔 <span>Glacier</span>AI</div>
+    <div class="nav-brand">🏔️ <span>Glacier</span>AI</div>
     <div class="nav-tabs">
-      <a href="/" class="nav-tab">🏠 Home</a>
-      <a href="/map" class="nav-tab">🗺 Map View</a>
-      <a href="/explorer" class="nav-tab">📊 Data Explorer</a>
-      <a href="/results" class="nav-tab">📈 Results <span class="nav-badge">5 models</span></a>
-      <a href="/analytics" class="nav-tab active">🔬 Analytics</a>
-      <a href="/sandbox" class="nav-tab">🧪 Sandbox</a>
+      <a href="/" class="nav-tab">Home</a>
+      <a href="/map" class="nav-tab">Map View</a>
+      <a href="/explorer" class="nav-tab">Data Explorer</a>
+      <a href="/results" class="nav-tab">Results <span class="nav-badge">5 models</span></a>
+      <a href="/analytics" class="nav-tab active">Analytics</a>
     </div>
   </nav>
 
   <div class="page">
-    <div style="margin-bottom:32px;display:flex;justify-content:space-between;align-items:flex-end">
+    <div style="margin-bottom:40px; display:flex; justify-content:space-between; align-items:flex-end">
       <div>
-        <div style="font-size:28px;font-weight:900;color:var(--blue-d);margin-bottom:4px">Cryospheric Analytics & Insights</div>
-        <div style="font-size:15px;color:var(--text2)">Multi-temporal change detection and spectral trend analysis (2018–2025)</div>
+        <h1 class="research-font" style="font-size:36px; color:var(--primary); margin-bottom:8px">Cryospheric Analytics & Insights</h1>
+        <p style="font-size:15px; color:var(--text-muted)">Multi-temporal change detection and spectral trend analysis (2018–2025)</p>
       </div>
-      <div style="display:flex;gap:12px">
-        <div class="badge badge-teal" style="padding:8px 16px">Region: HKH Central</div>
-        <div class="badge badge-blue" style="padding:8px 16px">Sensor: Sentinel-1/2</div>
+      <div style="display:flex; gap:12px">
+        <span class="badge badge-info">Region: HKH Central</span>
+        <span class="badge badge-success">Sensor: Sentinel-1/2</span>
       </div>
     </div>
 
     <!-- Key Metrics Grid -->
-    <div class="grid-4" style="margin-bottom:32px">
-      <div class="card" style="border-top:4px solid var(--coral)">
-        <div style="font-size:11px;font-weight:800;color:var(--text2);text-transform:uppercase;margin-bottom:10px;letter-spacing:1px">Mean Melt Velocity</div>
-        <div style="font-size:24px;font-weight:900;color:var(--coral)">-1.85% <span style="font-size:14px">/ yr</span></div>
-        <div style="font-size:12px;color:var(--text2);margin-top:8px">↑ 12% vs 2010–2018 baseline</div>
+    <div class="grid-4" style="margin-bottom:40px">
+      <div class="stat-pill" style="border-left-color: var(--danger)">
+        <div class="label">Mean Melt Velocity</div>
+        <div class="value" style="color:var(--danger)">-1.85% <span style="font-size:14px">/ yr</span></div>
+        <div class="sub">↑ 12% vs 2010–2018 baseline</div>
+        <div class="insight-card" style="margin-top:12px; padding:12px; border:none; background:var(--bg-main)">
+          <div class="insight-text" style="font-size:11px">Calculated via Sen's slope estimator on 7-year multi-sensor area time-series.</div>
+        </div>
       </div>
-      <div class="card" style="border-top:4px solid var(--teal)">
-        <div style="font-size:11px;font-weight:800;color:var(--text2);text-transform:uppercase;margin-bottom:10px;letter-spacing:1px">Glacier Health Index</div>
-        <div style="font-size:24px;font-weight:900;color:var(--teal)">72.4 <span style="font-size:14px">/ 100</span></div>
-        <div style="font-size:12px;color:var(--text2);margin-top:8px">Karakoram stability remains high</div>
+      <div class="stat-pill" style="border-left-color: var(--accent)">
+        <div class="label">Glacier Health Index</div>
+        <div class="value" style="color:var(--accent)">72.4 <span style="font-size:14px">/ 100</span></div>
+        <div class="sub">Karakoram stability remains high</div>
+        <div class="insight-card" style="margin-top:12px; padding:12px; border:none; background:var(--bg-main)">
+          <div class="insight-text" style="font-size:11px">Composite of NDSI consistency, LST anomalies, and SAR-based surface roughness.</div>
+        </div>
       </div>
-      <div class="card" style="border-top:4px solid var(--blue)">
-        <div style="font-size:11px;font-weight:800;color:var(--text2);text-transform:uppercase;margin-bottom:10px;letter-spacing:1px">Water Body Expansion</div>
-        <div style="font-size:24px;font-weight:900;color:var(--blue)">+142.5 <span style="font-size:14px">km²</span></div>
-        <div style="font-size:12px;color:var(--text2);margin-top:8px">Proglacial lake development detected</div>
+      <div class="stat-pill" style="border-left-color: var(--info)">
+        <div class="label">Water Body Expansion</div>
+        <div class="value" style="color:var(--info)">+142.5 <span style="font-size:14px">km²</span></div>
+        <div class="sub">Proglacial lake expansion</div>
+        <div class="insight-card" style="margin-top:12px; padding:12px; border:none; background:var(--bg-main)">
+          <div class="insight-text" style="font-size:11px">Automated NDWI segmentation on Sentinel-2 optical and Sentinel-1 SAR imagery.</div>
+        </div>
       </div>
-      <div class="card" style="border-top:4px solid var(--purple)">
-        <div style="font-size:11px;font-weight:800;color:var(--text2);text-transform:uppercase;margin-bottom:10px;letter-spacing:1px">LST Anomaly (Avg)</div>
-        <div style="font-size:24px;font-weight:900;color:var(--purple)">+1.24°C</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:8px">Landsat-9 Thermal TIRS calibration</div>
+      <div class="stat-pill" style="border-left-color: #7c3aed">
+        <div class="label">LST Anomaly (Avg)</div>
+        <div class="value" style="color:#7c3aed">+1.24°C</div>
+        <div class="sub">Landsat-9 Thermal TIRS calibration</div>
+        <div class="insight-card" style="margin-top:12px; padding:12px; border:none; background:var(--bg-main)">
+          <div class="insight-text" style="font-size:11px">Derived from emissivity-corrected thermal bands (Landsat-8/9) for HKH region.</div>
+        </div>
       </div>
     </div>
 
-    <div class="grid-2" style="margin-bottom:32px">
+    <div class="grid-2" style="margin-bottom:40px">
       <div class="card">
-        <div class="card-title">Regional Comparative Analysis</div>
-        <div style="font-size:13px;color:var(--text2);margin-bottom:20px">Inter-glacier comparison using multi-modal spectral and thermal proxies.</div>
-        <div style="display:flex;gap:12px;margin-bottom:20px">
-          <select id="compare-g1" style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);font-weight:600">
+        <h4 style="margin-bottom:12px">Regional Comparative Analysis</h4>
+        <p style="font-size:14px; color:var(--text-muted); margin-bottom:24px">Inter-glacier comparison using multi-modal spectral and thermal proxies.</p>
+        
+        <div style="display:flex; gap:12px; margin-bottom:24px">
+          <select id="compare-g1" class="btn btn-outline" style="flex:1; justify-content:flex-start">
             <option value="baltoro">Baltoro Glacier (Karakoram)</option>
             <option value="khumbu">Khumbu Glacier (Himalaya)</option>
             <option value="siachen">Siachen Glacier (Karakoram)</option>
             <option value="gangotri">Gangotri Glacier (Himalaya)</option>
           </select>
-          <select id="compare-g2" style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);font-weight:600">
+          <select id="compare-g2" class="btn btn-outline" style="flex:1; justify-content:flex-start">
             <option value="khumbu">Khumbu Glacier (Himalaya)</option>
             <option value="baltoro">Baltoro Glacier (Karakoram)</option>
             <option value="siachen">Siachen Glacier (Karakoram)</option>
             <option value="gangotri">Gangotri Glacier (Himalaya)</option>
           </select>
-          <button class="btn btn-primary" onclick="updateComparison()" style="padding:0 24px">Analyze</button>
+          <button class="btn btn-primary" onclick="updateComparison()">Analyze</button>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" id="comparison-view">
-          <div class="card" style="padding:15px;background:var(--gray-l);border:none">
-            <div id="g1-name" style="font-weight:800;font-size:14px;margin-bottom:8px">Select Glacier 1</div>
-            <div style="display:flex;justify-content:space-between;font-size:12px"><span>Melt Rate</span><span id="g1-melt" style="font-weight:700;color:var(--coral)">—</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:12px"><span>Health Index</span><span id="g1-health" style="font-weight:700;color:var(--teal)">—</span></div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px" id="comparison-view">
+          <div style="background:var(--bg-main); padding:20px; border-radius:var(--radius-md)">
+            <div id="g1-name" style="font-weight:800; font-size:15px; color:var(--primary); margin-bottom:12px">Select Glacier 1</div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:8px"><span>Melt Rate</span><span id="g1-melt" style="font-weight:700; color:var(--danger)">—</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:13px"><span>Health Index</span><span id="g1-health" style="font-weight:700; color:var(--accent)">—</span></div>
           </div>
-          <div class="card" style="padding:15px;background:var(--gray-l);border:none">
-            <div id="g2-name" style="font-weight:800;font-size:14px;margin-bottom:8px">Select Glacier 2</div>
-            <div style="display:flex;justify-content:space-between;font-size:12px"><span>Melt Rate</span><span id="g2-melt" style="font-weight:700;color:var(--coral)">—</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:12px"><span>Health Index</span><span id="g2-health" style="font-weight:700;color:var(--teal)">—</span></div>
+          <div style="background:var(--bg-main); padding:20px; border-radius:var(--radius-md)">
+            <div id="g2-name" style="font-weight:800; font-size:15px; color:var(--primary); margin-bottom:12px">Select Glacier 2</div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:8px"><span>Melt Rate</span><span id="g2-melt" style="font-weight:700; color:var(--danger)">—</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:13px"><span>Health Index</span><span id="g2-health" style="font-weight:700; color:var(--accent)">—</span></div>
           </div>
         </div>
-        <div style="margin-top:20px;padding:15px;background:var(--teal-l);border-radius:10px;font-size:12px;color:var(--text2)">
-          <b>Research Insight:</b> Comparative analysis reveals that Karakoram glaciers (e.g., Baltoro) show higher stability compared to the Central Himalaya (e.g., Gangotri), a phenomenon known as the "Karakoram Anomaly".
+
+        <div class="insight-card" style="margin-top:24px">
+          <div class="insight-header"><span>🌍</span> Research Insight</div>
+          <div class="insight-text" style="font-size:12px">Karakoram glaciers show higher stability compared to the Central Himalaya, a phenomenon known as the "Karakoram Anomaly".</div>
         </div>
       </div>
+
       <div class="card">
-        <div class="card-title">Spectral Index Multi-Temporal Trends</div>
-        <div style="font-size:13px;color:var(--text2);margin-bottom:20px">Cross-correlation of NDSI (Snow) and NDVI (Vegetation) anomalies (2018–2025).</div>
-        <div class="chart-box" style="height:320px"><canvas id="spectral-trend-chart"></canvas></div>
-        <div style="margin-top:20px;font-size:12px;color:var(--text2)">
-          <b>Trend Analysis:</b> The divergence between declining NDSI and increasing NDVI suggests "greening" of proglacial zones as permafrost thaws and vegetation colonizes previously ice-covered terrain.
+        <h4 style="margin-bottom:12px">Spectral Index Multi-Temporal Trends</h4>
+        <p style="font-size:14px; color:var(--text-muted); margin-bottom:24px">Cross-correlation of NDSI and NDVI anomalies (2018–2025).</p>
+        <div style="height:300px"><canvas id="spectral-trend-chart"></canvas></div>
+        <div class="insight-card" style="margin-top:24px; border-color:var(--info); background:rgba(59, 130, 246, 0.05)">
+          <div class="insight-header" style="color:var(--info)"><span>📈</span> Trend Analysis</div>
+          <div class="insight-text" style="font-size:12px; color:var(--info)">The divergence between declining NDSI and increasing NDVI suggests "greening" of proglacial zones as permafrost thaws.</div>
         </div>
       </div>
     </div>
 
-    <div class="grid-3" style="margin-bottom:32px">
+    <div class="grid-3" style="margin-bottom:40px">
       <div class="card">
-        <div class="card-title">Hypsometric Distribution</div>
-        <div style="font-size:12px;color:var(--text2);margin-bottom:15px">Pixel-level elevation frequency derived from SRTM DEM data.</div>
-        <div class="chart-box" style="height:240px"><canvas id="elev-dist-chart"></canvas></div>
+        <h4 style="font-size:15px; margin-bottom:16px">Hypsometric Distribution</h4>
+        <div style="height:200px"><canvas id="elev-dist-chart"></canvas></div>
       </div>
       <div class="card">
-        <div class="card-title">LST vs Glacier Area</div>
-        <div style="font-size:12px;color:var(--text2);margin-bottom:15px">Correlation between Land Surface Temperature and melt extent.</div>
-        <div class="chart-box" style="height:240px"><canvas id="lst-area-scatter"></canvas></div>
+        <h4 style="font-size:15px; margin-bottom:16px">LST vs Glacier Area</h4>
+        <div style="height:200px"><canvas id="lst-area-scatter"></canvas></div>
       </div>
       <div class="card">
-        <div class="card-title">Precipitation Proxy</div>
-        <div style="font-size:12px;color:var(--text2);margin-bottom:15px">CHIRPS-based accumulation vs ablation patterns.</div>
-        <div class="chart-box" style="height:240px"><canvas id="precip-chart"></canvas></div>
+        <h4 style="font-size:15px; margin-bottom:16px">Precipitation Proxy</h4>
+        <div style="height:200px"><canvas id="precip-chart"></canvas></div>
       </div>
     </div>
 
-    <!-- Research Methodology Insights -->
-    <div class="card" style="margin-bottom:40px;border-left:4px solid var(--teal)">
-      <div class="card-title">Research Methodology & Algorithms</div>
-      <div style="font-size:14px;color:var(--text2);line-height:1.8">
-        <p>The analytics presented here are derived from multi-modal sensor fusion (Sentinel-1 SAR C-band and Sentinel-2 MSI). 
-        The <b>Glacier Health Index (GHI)</b> is a weighted composite of NDSI consistency, LST anomalies, and SAR-based surface roughness.</p>
+    <!-- Research Methodology -->
+    <div class="card" style="margin-bottom:60px; border-top: 4px solid var(--accent)">
+      <h4 style="margin-bottom:24px">Research Methodology & Algorithms</h4>
+      <div style="font-size:15px; color:var(--text-muted); line-height:1.8">
+        <p>The analytics presented here are derived from multi-modal sensor fusion (Sentinel-1 SAR and Sentinel-2 MSI). The <b>Glacier Health Index (GHI)</b> is a weighted composite of NDSI consistency, LST anomalies, and SAR-based surface roughness.</p>
         
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-top:20px;background:var(--gray-l);padding:20px;border-radius:12px">
-          <div><b>NDSI:</b> (Green - SWIR) / (Green + SWIR)</div>
-          <div><b>NDWI:</b> (Green - NIR) / (Green + NIR)</div>
-          <div><b>NDVI:</b> (NIR - Red) / (NIR + Red)</div>
+        <div class="grid-3" style="margin-top:32px">
+          <div style="background:var(--bg-main); padding:20px; border-radius:var(--radius-md); text-align:center">
+            <div style="font-weight:800; color:var(--primary); margin-bottom:8px">NDSI</div>
+            <div style="font-size:12px; font-family:monospace">(Green - SWIR) / (Green + SWIR)</div>
+          </div>
+          <div style="background:var(--bg-main); padding:20px; border-radius:var(--radius-md); text-align:center">
+            <div style="font-weight:800; color:var(--primary); margin-bottom:8px">NDWI</div>
+            <div style="font-size:12px; font-family:monospace">(Green - NIR) / (Green + NIR)</div>
+          </div>
+          <div style="background:var(--bg-main); padding:20px; border-radius:var(--radius-md); text-align:center">
+            <div style="font-weight:800; color:var(--primary); margin-bottom:8px">NDVI</div>
+            <div style="font-size:12px; font-family:monospace">(NIR - Red) / (NIR + Red)</div>
+          </div>
         </div>
-        
-        <p style="margin-top:20px">Temporal trends use a Sen's slope estimator to mitigate the impact of seasonal outlier variances. Land Surface Temperature (LST) is calibrated from Landsat TIRS bands using emissivity-corrected algorithms.</p>
       </div>
     </div>
   </div>

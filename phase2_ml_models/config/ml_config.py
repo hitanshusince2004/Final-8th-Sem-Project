@@ -104,14 +104,13 @@ CNN_CONFIG = {
 }
 
 CNN_TRAIN = {
-    "epochs":          1,
-    "batch_size":      4,
-    "lr":              1e-3,
-    "weight_decay":    1e-4,
-    "lr_scheduler":    "cosine",
-    "warmup_epochs":   1,
-    "early_stop":      5,
-    "mixed_precision": False,
+    "lr":           1e-3,
+    "batch_size":   16,
+    "epochs":       2,      # Reduced for fast verification
+    "early_stop":   5,
+    "loss":         "dice", 
+    "lr_scheduler": "cosine",
+    "max_val_batches": 2,   # Reduced for fast verification
 }
 
 # ── U-Net ─────────────────────────────────────────────────────────────────────
@@ -122,17 +121,17 @@ UNET_CONFIG = {
     "depth":           3,
     "dropout":         0.1,
     "bilinear":        True,
-    "attention":       False,
+    "attention":       True,
 }
 
 UNET_TRAIN = {
-    "epochs":          1,
-    "batch_size":      1,
-    "lr":              3e-4,
-    "weight_decay":    1e-5,
-    "lr_scheduler":    "cosine",
-    "early_stop":      5,
-    "mixed_precision": False,
+    "lr":           1e-3,
+    "batch_size":   8,
+    "epochs":       2,      # Reduced for fast verification
+    "early_stop":   5,
+    "loss":         "dice_ce",
+    "lr_scheduler": "cosine",
+    "max_val_batches": 2,   # Reduced for fast verification
 }
 
 # ── DeepLabv3+ ────────────────────────────────────────────────────────────────
@@ -146,8 +145,8 @@ DEEPLAB_CONFIG = {
 }
 
 DEEPLAB_TRAIN = {
-    "epochs":          1,
-    "batch_size":      1,
+    "epochs":          2,
+    "batch_size":      2,
     "lr":              1e-4,
     "weight_decay":    5e-5,
     "lr_scheduler":    "poly",

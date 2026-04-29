@@ -230,7 +230,33 @@ class GlacierLinearModel(GlacierMLModel):
         return fig
 
 
-class GlacierLinearRegression(GlacierLinearModel):
+class GlacierLinearRegressionStandard(GlacierLinearModel):
+    """Standard Linear Regression."""
+    name       = "Linear Regression"
+    task       = "regression"
+    target_col = REGRESSION_TARGET
+
+    def __init__(self):
+        super().__init__()
+        self.model = Pipeline([
+            ("scaler", StandardScaler()),
+            ("reg",    LinearRegression(fit_intercept=True)),
+        ])
+
+    def get_coefficients(self, feature_names=None):
+        """Standard linear regression uses 'reg' step."""
+        lin_model = self.model.named_steps["reg"]
+        coef = lin_model.coef_
+        names = feature_names or self.feature_names or [f"f{i}" for i in range(len(coef))]
+        df = pd.DataFrame({
+            "feature":     names,
+            "coefficient": coef,
+            "abs_coef":    np.abs(coef),
+        }).sort_values("abs_coef", ascending=False)
+        return df
+
+
+class GlacierRidgeRegression(GlacierLinearModel):
     """Ridge Regression."""
     name       = "Ridge Regression"
     task       = "regression"
@@ -381,16 +407,48 @@ class GlacierRandomForestClassifier(GlacierMLModel):
             default_names = ["Non-glacier", "Glacier"] if self.task == "binary" else ["Land", "Snow/Ice", "Water", "Debris"]
             names = [default_names[int(i)] for i in classes_present]
             
+        fig, ax = plt.subplots(figsize=(10, 8))
         disp = ConfusionMatrixDisplay.from_predictions(
             y_test, y_pred, labels=classes_present, display_labels=names,
-            cmap="Blues", normalize="true",
+            cmap="Blues", normalize="true", ax=ax
         )
-        disp.ax_.set_title(f"{self.name} — Confusion Matrix ({self.task})")
+        ax.set_title(f"{self.name} — Confusion Matrix ({self.task})")
         plt.tight_layout()
         if save_path:
             plt.savefig(save_path, dpi=150, bbox_inches="tight")
         plt.close()
-        return disp.figure_
+        return fig
+
+    def plot_distribution(self, X_test, y_test, save_path=None):
+        """Plot the distribution of predicted vs actual classes."""
+        y_pred = self.predict(X_test)
+        fig, ax = plt.subplots(figsize=(10, 6))
+        
+        classes = np.unique(np.concatenate([y_test, y_pred]))
+        default_names = ["Non-glacier", "Glacier"] if self.task == "binary" else ["Land", "Snow/Ice", "Water", "Debris"]
+        names = [default_names[int(i)] for i in classes]
+        
+        # Calculate counts for each class
+        y_test_counts = [np.sum(y_test == c) for c in classes]
+        y_pred_counts = [np.sum(y_pred == c) for c in classes]
+        
+        x = np.arange(len(classes))
+        width = 0.35
+        
+        ax.bar(x - width/2, y_test_counts, width, label='Actual', color='blue', alpha=0.6)
+        ax.bar(x + width/2, y_pred_counts, width, label='Predicted', color='orange', alpha=0.6)
+        
+        ax.set_ylabel('Count')
+        ax.set_title(f'{self.name} — Class Distribution (Actual vs Predicted)')
+        ax.set_xticks(x)
+        ax.set_xticklabels(names)
+        ax.legend()
+        
+        plt.tight_layout()
+        if save_path:
+            plt.savefig(save_path, dpi=150, bbox_inches="tight")
+        plt.close()
+        return fig
 
 
 class GlacierExtraTreesClassifier(GlacierRandomForestClassifier):
@@ -428,7 +486,8 @@ def train_ml_models(run_regression=True, run_classification=True):
         X_te, y_te, _     = load_tabular_data("test",  REGRESSION_TARGET)
 
         regression_models = [
-            GlacierLinearRegression(alpha=1.0),
+            GlacierLinearRegressionStandard(),
+            GlacierRidgeRegression(alpha=1.0),
             GlacierLassoRegression(alpha=0.1),
             GlacierElasticNetRegression(alpha=0.1, l1_ratio=0.5),
             GlacierRandomForestRegressor(),
@@ -486,6 +545,8 @@ def train_ml_models(run_regression=True, run_classification=True):
             all_results[f"{m.name} (Binary)"] = te_metrics
             
             base_name = m.name.lower().replace(" ", "_") + "_binary"
+            m.plot_distribution(X_te, y_te, save_path=os.path.join(RESULTS_DIR, f"{base_name}_dist.png"))
+            
             if isinstance(m, GlacierLinearModel):
                 m.plot_coefficients(feats, save_path=os.path.join(RESULTS_DIR, f"{base_name}_coef.png"))
             if isinstance(m, (GlacierRandomForestClassifier, GlacierExtraTreesClassifier)):
@@ -513,6 +574,7 @@ def train_ml_models(run_regression=True, run_classification=True):
             all_results[f"{m.name} (Multiclass)"] = te_metrics
             
             base_name = m.name.lower().replace(" ", "_") + "_multiclass"
+            m.plot_distribution(X_te_mc, y_te_mc, save_path=os.path.join(RESULTS_DIR, f"{base_name}_dist.png"))
             m.plot_feature_importance(feats, save_path=os.path.join(RESULTS_DIR, f"{base_name}_feat_imp.png"))
             m.plot_confusion_matrix(X_te_mc, y_te_mc, save_path=os.path.join(RESULTS_DIR, f"{base_name}_cm.png"))
 

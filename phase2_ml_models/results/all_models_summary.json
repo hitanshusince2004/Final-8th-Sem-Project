@@ -1,62 +1,372 @@
 {
   "Linear Regression": {
+    "MAE": 0.0,
+    "MSE": 0.0,
+    "RMSE": 0.0,
+    "R2": 1.0,
+    "split": "test",
+    "model": "Linear Regression",
     "task": "regression",
-    "type": "ML",
-    "MAE": 2.34,
-    "MSE": 8.72,
-    "RMSE": 2.95,
-    "R2": 0.87,
-    "model": "linear_regression"
+    "type": "ML"
   },
-  "Random Forest": {
+  "Ridge Regression": {
+    "MAE": 0.0012,
+    "MSE": 0.0,
+    "RMSE": 0.0013,
+    "R2": 1.0,
+    "split": "test",
+    "model": "Ridge Regression",
     "task": "regression",
-    "type": "ML",
-    "MAE": 1.56,
-    "MSE": 4.21,
-    "RMSE": 2.05,
-    "R2": 0.93,
-    "model": "random_forest"
+    "type": "ML"
   },
-  "CNN (GlacierFCN)": {
+  "Lasso Regression": {
+    "MAE": 0.0831,
+    "MSE": 0.0099,
+    "RMSE": 0.0995,
+    "R2": 0.99,
+    "split": "test",
+    "model": "Lasso Regression",
+    "task": "regression",
+    "type": "ML"
+  },
+  "ElasticNet Regression": {
+    "MAE": 0.062,
+    "MSE": 0.0056,
+    "RMSE": 0.0748,
+    "R2": 0.9944,
+    "split": "test",
+    "model": "ElasticNet Regression",
+    "task": "regression",
+    "type": "ML"
+  },
+  "Random Forest Regressor": {
+    "MAE": 0.029,
+    "MSE": 0.0023,
+    "RMSE": 0.048,
+    "R2": 0.9977,
+    "split": "test",
+    "model": "Random Forest Regressor",
+    "task": "regression",
+    "type": "ML"
+  },
+  "Extra Trees Regressor": {
+    "MAE": 0.0562,
+    "MSE": 0.0062,
+    "RMSE": 0.0784,
+    "R2": 0.9938,
+    "split": "test",
+    "model": "Extra Trees Regressor",
+    "task": "regression",
+    "type": "ML"
+  },
+  "Logistic Regression (Binary)": {
+    "Accuracy": 0.9912,
+    "Precision": 0.9251,
+    "Recall": 1.0,
+    "F1": 0.9611,
+    "AUC_ROC": 0.9996,
+    "split": "test",
+    "model": "Logistic Regression",
     "task": "segmentation",
-    "type": "DL",
-    "Accuracy": 0.924,
-    "Precision": 0.918,
-    "Recall": 0.931,
-    "F1": 0.924,
-    "mIoU": 0.862,
-    "mDice": 0.926,
-    "AUC_ROC": 0.967,
-    "IoU_per_class": [0.912, 0.845, 0.783, 0.791],
-    "Dice_per_class": [0.954, 0.916, 0.878, 0.883],
-    "model": "cnn_fcn"
+    "type": "ML"
+  },
+  "Random Forest Classifier (Binary)": {
+    "Accuracy": 0.9967,
+    "Precision": 0.9784,
+    "Recall": 0.9912,
+    "F1": 0.9848,
+    "AUC_ROC": 0.9999,
+    "split": "test",
+    "model": "Random Forest Classifier",
+    "task": "segmentation",
+    "type": "ML"
+  },
+  "Extra Trees Classifier (Binary)": {
+    "Accuracy": 0.9933,
+    "Precision": 0.9516,
+    "Recall": 0.9891,
+    "F1": 0.97,
+    "AUC_ROC": 0.9997,
+    "split": "test",
+    "model": "Extra Trees Classifier",
+    "task": "segmentation",
+    "type": "ML"
+  },
+  "Random Forest Classifier (Multiclass)": {
+    "Accuracy": 0.9879,
+    "Precision": 0.4853,
+    "Recall": 0.4952,
+    "F1": 0.4902,
+    "AUC_ROC": 0.9898,
+    "split": "test",
+    "model": "Random Forest Classifier",
+    "task": "segmentation",
+    "type": "ML"
+  },
+  "Extra Trees Classifier (Multiclass)": {
+    "Accuracy": 0.9862,
+    "Precision": 0.4839,
+    "Recall": 0.4944,
+    "F1": 0.489,
+    "AUC_ROC": 0.9883,
+    "split": "test",
+    "model": "Extra Trees Classifier",
+    "task": "segmentation",
+    "type": "ML"
+  },
+  "CNN_Basic": {
+    "Accuracy": 1.0,
+    "Precision": 0.25,
+    "Recall": 0.25,
+    "F1": 0.25,
+    "mIoU": 0.25,
+    "mDice": 0.25,
+    "AUC_ROC": "N/A",
+    "IoU_per_class": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Dice_per_class": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "confusion_matrix": [
+      [
+        75,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "test_loss": 0.0001,
+    "model": "cnn_basic",
+    "task": "segmentation",
+    "type": "DL"
+  },
+  "CNN_ResNet18": {
+    "Accuracy": 1.0,
+    "Precision": 0.25,
+    "Recall": 0.25,
+    "F1": 0.25,
+    "mIoU": 0.25,
+    "mDice": 0.25,
+    "AUC_ROC": "N/A",
+    "IoU_per_class": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Dice_per_class": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "confusion_matrix": [
+      [
+        75,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "test_loss": 0.0,
+    "model": "cnn_resnet18",
+    "task": "segmentation",
+    "type": "DL"
+  },
+  "CNN_FCN": {
+    "Accuracy": 0.8596,
+    "Precision": 0.2149,
+    "Recall": 0.25,
+    "F1": 0.2311,
+    "mIoU": 0.2149,
+    "mDice": 0.2311,
+    "AUC_ROC": 0.4848,
+    "IoU_per_class": [
+      0.8596,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Dice_per_class": [
+      0.9245,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "confusion_matrix": [
+      [
+        4225334,
+        0,
+        0,
+        0
+      ],
+      [
+        531465,
+        0,
+        0,
+        0
+      ],
+      [
+        64474,
+        0,
+        0,
+        0
+      ],
+      [
+        93927,
+        0,
+        0,
+        0
+      ]
+    ],
+    "test_loss": 0.75963,
+    "model": "cnn_fcn",
+    "task": "segmentation",
+    "type": "DL"
   },
   "U-Net": {
+    "Accuracy": 0.8596,
+    "Precision": 0.2149,
+    "Recall": 0.25,
+    "F1": 0.2311,
+    "mIoU": 0.2149,
+    "mDice": 0.2311,
+    "AUC_ROC": 0.5355,
+    "IoU_per_class": [
+      0.8596,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Dice_per_class": [
+      0.9245,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "confusion_matrix": [
+      [
+        4225317,
+        0,
+        15,
+        2
+      ],
+      [
+        531465,
+        0,
+        0,
+        0
+      ],
+      [
+        64474,
+        0,
+        0,
+        0
+      ],
+      [
+        93927,
+        0,
+        0,
+        0
+      ]
+    ],
+    "test_loss": 1.28241,
+    "model": "unet",
     "task": "segmentation",
-    "type": "DL",
-    "Accuracy": 0.951,
-    "Precision": 0.948,
-    "Recall": 0.954,
-    "F1": 0.951,
-    "mIoU": 0.908,
-    "mDice": 0.952,
-    "AUC_ROC": 0.983,
-    "IoU_per_class": [0.961, 0.924, 0.881, 0.887],
-    "Dice_per_class": [0.980, 0.960, 0.937, 0.940],
-    "model": "unet"
+    "type": "DL"
   },
   "DeepLabv3+": {
+    "Accuracy": 0.5642,
+    "Precision": 0.2783,
+    "Recall": 0.2998,
+    "F1": 0.2886,
+    "mIoU": 0.1834,
+    "mDice": 0.2551,
+    "AUC_ROC": 0.5863,
+    "IoU_per_class": [
+      0.5747,
+      0.1193,
+      0.0131,
+      0.0265
+    ],
+    "Dice_per_class": [
+      0.73,
+      0.2131,
+      0.0259,
+      0.0516
+    ],
+    "confusion_matrix": [
+      [
+        2594481,
+        730814,
+        567212,
+        332827
+      ],
+      [
+        217907,
+        155571,
+        82163,
+        75824
+      ],
+      [
+        32430,
+        14829,
+        9576,
+        7639
+      ],
+      [
+        38457,
+        27265,
+        14702,
+        13503
+      ]
+    ],
+    "test_loss": 1.95137,
+    "model": "deeplabv3plus",
     "task": "segmentation",
-    "type": "DL",
-    "Accuracy": 0.968,
-    "Precision": 0.965,
-    "Recall": 0.971,
-    "F1": 0.968,
-    "mIoU": 0.938,
-    "mDice": 0.968,
-    "AUC_ROC": 0.991,
-    "IoU_per_class": [0.975, 0.948, 0.912, 0.918],
-    "Dice_per_class": [0.987, 0.973, 0.954, 0.957],
-    "model": "deeplabv3plus"
+    "type": "DL"
   }
 }

@@ -1,33 +1,33 @@
 {
-  "Accuracy": 0.8836,
-  "Precision": 0.2839,
-  "Recall": 0.2511,
-  "F1": 0.2665,
-  "mIoU": 0.2226,
-  "mDice": 0.2379,
+  "Accuracy": 1.0,
+  "Precision": 0.25,
+  "Recall": 0.25,
+  "F1": 0.25,
+  "mIoU": 0.25,
+  "mDice": 0.25,
   "AUC_ROC": "N/A",
   "IoU_per_class": [
-    0.8835,
-    0.0068,
+    1.0,
+    0.0,
     0.0,
     0.0
   ],
   "Dice_per_class": [
-    0.9382,
-    0.0136,
+    1.0,
+    0.0,
     0.0,
     0.0
   ],
   "confusion_matrix": [
     [
-      4407,
-      12,
+      75,
+      0,
       0,
       0
     ],
     [
-      569,
-      4,
+      0,
+      0,
       0,
       0
     ],
@@ -44,6 +44,6 @@
       0
     ]
   ],
-  "test_loss": 1.69422,
+  "test_loss": 0.0,
   "model": "cnn_resnet18"
 }

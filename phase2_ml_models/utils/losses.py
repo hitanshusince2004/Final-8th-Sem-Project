@@ -32,18 +32,25 @@ class DiceLoss(nn.Module):
 
     def forward(self, logits, targets):
         """
-        logits:  (B, C, H, W) — raw model outputs
-        targets: (B, H, W)    — integer class labels
+        logits:  (B, C, H, W) or (B, C) — raw model outputs
+        targets: (B, H, W) or (B,)      — integer class labels
         """
         num_classes = logits.shape[1]
         probs       = F.softmax(logits, dim=1)
 
-        # One-hot encode targets: (B, C, H, W)
-        targets_oh  = F.one_hot(targets, num_classes).permute(0, 3, 1, 2).float()
-
-        # Flatten spatial dims
-        probs_flat  = probs.view(probs.shape[0], num_classes, -1)      # (B, C, N)
-        targets_flat = targets_oh.view(targets_oh.shape[0], num_classes, -1)  # (B, C, N)
+        # One-hot encode targets
+        targets_oh  = F.one_hot(targets, num_classes).float()
+        
+        # If 4D (segmentation), permute to (B, C, H, W)
+        if targets_oh.ndim == 4:
+            targets_oh = targets_oh.permute(0, 3, 1, 2)
+            # Flatten spatial dims
+            probs_flat  = probs.view(probs.shape[0], num_classes, -1)      # (B, C, N)
+            targets_flat = targets_oh.view(targets_oh.shape[0], num_classes, -1)  # (B, C, N)
+        else:
+            # Classification: already (B, C)
+            probs_flat   = probs.unsqueeze(-1)    # (B, C, 1)
+            targets_flat = targets_oh.unsqueeze(-1) # (B, C, 1)
 
         intersection = (probs_flat * targets_flat).sum(dim=2)           # (B, C)
         union        = probs_flat.sum(dim=2) + targets_flat.sum(dim=2)  # (B, C)

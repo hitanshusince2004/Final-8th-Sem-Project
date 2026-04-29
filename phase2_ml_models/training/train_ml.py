@@ -18,7 +18,8 @@ def run_ml_models():
     print("  PHASE 2: Traditional Machine Learning Models")
     print("═"*60)
     
-    results = train_ml_models()
+    # Train both regression and classification variants
+    results = train_ml_models(run_regression=True, run_classification=True)
     return results
 
 if __name__ == "__main__":

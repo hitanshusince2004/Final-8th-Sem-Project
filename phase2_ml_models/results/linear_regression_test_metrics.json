@@ -1,7 +1,7 @@
 {
-  "MAE": 0.0003,
+  "MAE": 0.0,
   "MSE": 0.0,
-  "RMSE": 0.0004,
+  "RMSE": 0.0,
   "R2": 1.0,
   "split": "test",
   "model": "Linear Regression"

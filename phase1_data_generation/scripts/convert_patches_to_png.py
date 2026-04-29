@@ -9,34 +9,29 @@ def convert_tif_to_png(tif_path, output_dir):
     """Convert a 13-band Sentinel-2 GeoTIFF patch to RGB, Binary Mask, and Multi Mask PNGs."""
     try:
         with rasterio.open(tif_path) as src:
-            # Band mapping from generate_image_dataset.py:
-            # [B2, B3, B4, B5, B6, B7, B8, B8A, B11, B12, NDSI, NDWI, NDVI]
-            # Actually, check generate_image_dataset.py: 
-            # bands = ["B2","B3","B4","B5","B6","B7","B8","B8A","B11","B12","NDSI","NDWI","NDVI"] (13 bands)
-            # Labels (masks) are added in create_glacier_mask and create_multiclass_mask.
-            # Let's verify the band count.
+            # Band mapping from generate_image_dataset.py patch_stack:
+            # 1: B4, 2: B3, 3: B2, 4: B8, 5: B11, 6: NDSI, 7: NDWI, 8: glacier_mask, 9: multiclass_mask, ...
             
-            # RGB: B4(3), B3(2), B2(1)
-            r = src.read(3)
+            # RGB: B4(1), B3(2), B2(3)
+            r = src.read(1)
             g = src.read(2)
-            b = src.read(1)
+            b = src.read(3)
             
             rgb = np.dstack((r, g, b))
             p2, p98 = np.percentile(rgb, (2, 98))
             rgb = np.clip((rgb - p2) / (p98 - p2) * 255, 0, 255).astype(np.uint8)
             Image.fromarray(rgb).save(os.path.join(output_dir, Path(tif_path).stem + "_rgb.png"))
             
-            # Binary Mask: If present (usually after index 12)
-            # In our dataset creation, we add glacier_mask and multiclass_mask.
-            # If src.count > 13, then band 14 is glacier_mask, band 15 is multiclass_mask.
-            if src.count >= 14:
-                mask = src.read(14)
+            # Binary Mask: glacier_mask is Band 8
+            if src.count >= 8:
+                mask = src.read(8)
                 # Scale 0-1 to 0-255 for visibility
                 mask_img = (mask * 255).astype(np.uint8)
                 Image.fromarray(mask_img).save(os.path.join(output_dir, Path(tif_path).stem + "_mask.png"))
             
-            if src.count >= 15:
-                multi = src.read(15)
+            # Multi Mask: multiclass_mask is Band 9
+            if src.count >= 9:
+                multi = src.read(9)
                 # Classes: 0, 1, 2, 3 -> Map to distinct values for visibility
                 multi_img = (multi * 64).astype(np.uint8)
                 Image.fromarray(multi_img).save(os.path.join(output_dir, Path(tif_path).stem + "_multimask.png"))
